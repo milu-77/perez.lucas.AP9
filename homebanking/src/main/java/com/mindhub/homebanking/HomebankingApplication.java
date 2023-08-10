@@ -2,8 +2,11 @@ package com.mindhub.homebanking;
 
 import com.mindhub.homebanking.models.Account;
 import com.mindhub.homebanking.models.Client;
+import com.mindhub.homebanking.models.Transaction;
+import com.mindhub.homebanking.models.TransactionType;
 import com.mindhub.homebanking.repositories.AccountRepository;
 import com.mindhub.homebanking.repositories.ClientRepository;
+import com.mindhub.homebanking.repositories.TransactionRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -21,7 +24,7 @@ public class HomebankingApplication {
 	}
 
 	@Bean
-	public CommandLineRunner initData(ClientRepository repository, AccountRepository repo2) {
+	public CommandLineRunner initData(ClientRepository repository, AccountRepository repo2, TransactionRepository repotransactions) {
 		return (args) -> {
 			// save a couple of customers
 			Client melba =new Client("Melba ", "Morel ","Melba@morel.com");
@@ -31,15 +34,39 @@ public class HomebankingApplication {
 			Account vin001 = new Account( "VIN001",LocalDateTime.now(),5000);
 			Account vin002 = new Account( "VIN002",LocalDateTime.now().plusHours(24),7500);
 			Account vin003 = new Account( "VIN003",LocalDateTime.now().plusHours(48),5000);
+
+			Transaction transaction1 = new Transaction( TransactionType.DEBIT,LocalDateTime.now(),"Compra",1000 );
+			Transaction transaction2 = new Transaction( TransactionType.CREDIT,LocalDateTime.now().plusHours(2),"Transferencia",1000 );
+			Transaction transaction3 = new Transaction( TransactionType.DEBIT,LocalDateTime.now().plusMonths(2),"Gasto Random",5000 );
+			Transaction transaction4 = new Transaction( TransactionType.CREDIT,LocalDateTime.now().plusHours(2),"Transferencia",1400 );
+			Transaction transaction5 = new Transaction( TransactionType.DEBIT,LocalDateTime.now().plusHours(1),"Comprra de algo random",1030 );
+			Transaction transaction6 = new Transaction( TransactionType.CREDIT,LocalDateTime.now().plusHours(2),"Transferencia",1000 );
+
+			vin001.addTransaction(transaction1);
+			vin001.addTransaction(transaction2);
+			vin001.addTransaction(transaction3);
+			vin002.addTransaction(transaction4);
+			vin002.addTransaction(transaction5);
+			vin002.addTransaction(transaction6);
 			melba.addAccounts(vin001);
 			melba.addAccounts(vin002);
 			juan.addAccounts(vin003);
+
+
+
 			repository.save(melba);
 			repository.save(juan);
 			repository.save(martita);
 			repo2.save(vin001);
 			repo2.save(vin002);
 			repo2.save(vin003);
+			repotransactions.save(transaction1);
+			repotransactions.save(transaction2);
+			repotransactions.save(transaction3);
+			repotransactions.save(transaction4);
+			repotransactions.save(transaction5);
+			repotransactions.save(transaction6);
+
 
 		};
 	}

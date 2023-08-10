@@ -1,0 +1,76 @@
+package com.mindhub.homebanking.models;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.GenericGenerator;
+
+import javax.persistence.*;
+import java.time.LocalDateTime;
+
+@Entity
+public class Transaction {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
+    @GenericGenerator(name = "native", strategy = "native")
+    private Long id;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name="account_id")
+    private Account account ;
+    private TransactionType type;
+    private LocalDateTime date;
+    private String description;
+    private float amount;
+
+    public Transaction() {
+    }
+
+    public Transaction(TransactionType type, LocalDateTime date, String desciption, float amount) {
+        this.type = type;
+        this.date = date;
+        this.description = desciption;
+        this.amount = amount;
+    }
+
+    public void setAccount(Account account) {
+        this.account = account;
+    }
+
+    public void setType(TransactionType type) {
+        this.type = type;
+    }
+
+    public void setDate(LocalDateTime date) {
+        this.date = date;
+    }
+
+    public void setDesciption(String desciption) {
+        this.description = desciption;
+    }
+
+    public void setAmount(float amount) {
+        this.amount = amount;
+    }
+
+    public Long getId() {
+        return id;
+    }
+    @JsonIgnore
+    public Account getAccount() {
+        return account;
+    }
+
+    public TransactionType getType() {
+        return type;
+    }
+
+    public LocalDateTime getDate() {
+        return date;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public float getAmount() {
+        return amount;
+    }
+}

@@ -23,7 +23,9 @@ public class ClientController {
     private ClientRepository personRepository;
     @GetMapping( "/clients")
      public  List<ClientDTO> getClients () {
-        List<ClientDTO> clients = personRepository.findAll().stream().map(client -> new ClientDTO(client)).collect(toList());
+        List<ClientDTO> clients = personRepository.findAll().stream()
+                .map(client -> new ClientDTO(client))
+                .collect(toList());
         return clients;
     }
 
