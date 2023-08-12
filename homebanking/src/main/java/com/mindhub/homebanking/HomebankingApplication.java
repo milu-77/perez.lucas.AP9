@@ -24,7 +24,9 @@ public class HomebankingApplication {
 	}
 
 	@Bean
-	public CommandLineRunner initData(ClientRepository repository, AccountRepository repo2, TransactionRepository repotransactions) {
+	public CommandLineRunner initData(ClientRepository clientRepository,
+									  AccountRepository accountRepository,
+									  TransactionRepository transactionRepository) {
 		return (args) -> {
 			// save a couple of customers
 			Client melba =new Client("Melba ", "Morel ","Melba@morel.com");
@@ -54,18 +56,18 @@ public class HomebankingApplication {
 
 
 
-			repository.save(melba);
-			repository.save(juan);
-			repository.save(martita);
-			repo2.save(vin001);
-			repo2.save(vin002);
-			repo2.save(vin003);
-			repotransactions.save(transaction1);
-			repotransactions.save(transaction2);
-			repotransactions.save(transaction3);
-			repotransactions.save(transaction4);
-			repotransactions.save(transaction5);
-			repotransactions.save(transaction6);
+			clientRepository.save(melba);
+			clientRepository.save(juan);
+			clientRepository.save(martita);
+			accountRepository.save(vin001);
+			accountRepository.save(vin002);
+			accountRepository.save(vin003);
+			transactionRepository.save(transaction1);
+			transactionRepository.save(transaction2);
+			transactionRepository.save(transaction3);
+			transactionRepository.save(transaction4);
+			transactionRepository.save(transaction5);
+			transactionRepository.save(transaction6);
 
 
 		};
