@@ -82,7 +82,7 @@
                     <div class="row mt-3">
                         <div class="col">
                             <h2 class="display-6 account">Account Number: {{ accountInfo.number }} - Balance: ${{
-                                accountInfo.balance }} </h2>
+                                accountInfo.balance }}</h2>
                         </div>
                     </div>
                     <div class="row mt-3">
@@ -98,9 +98,9 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr v-for="(transaction, id) in accountInfo.transactions"
+                                    <tr v-for="(transaction, index) in accountInfo.transactions"
                                         v-bind:class="[ transaction.type == 'CREDIT' ? 'credit-transaction' : 'debit-transaction' ]">
-                                        <td>{{ id+1 }}</td>
+                                        <td>{{ index+1 }}</td>
                                         <td>{{ transaction.description }}</td>
                                         <td>{{ formatDate(transaction.date) }}</td>
                                         <td>{{ transaction.amount }}</td>
