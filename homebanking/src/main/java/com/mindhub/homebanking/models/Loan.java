@@ -61,11 +61,13 @@ public class Loan {
     public void setPayments(List<Integer> payments) {
         this.payments = payments;
     }
+
     @JsonIgnore
     public Set<ClientLoan> getClientLoans() {
         return clientLoans;
     }
-    public void setLoan( ClientLoan  client) {
+
+    public void setLoan(ClientLoan client) {
         this.clientLoans.add(client);
         client.setLoan(this);
     }

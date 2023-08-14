@@ -7,8 +7,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
- import java.time.LocalDateTime;
- import java.util.ArrayList;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 @SpringBootApplication
 public class HomebankingApplication {
@@ -38,7 +38,7 @@ public class HomebankingApplication {
             Transaction transaction2 = new Transaction(TransactionType.CREDIT, LocalDateTime.now().plusHours(2), "Transferencia", 1000);
             Transaction transaction3 = new Transaction(TransactionType.DEBIT, LocalDateTime.now().plusMonths(2), "Gasto Random", 5000);
             Transaction transaction4 = new Transaction(TransactionType.CREDIT, LocalDateTime.now().plusHours(2), "Transferencia", 1400);
-            Transaction transaction5 = new Transaction(TransactionType.DEBIT, LocalDateTime.now().plusHours(1), "Comprra de algo random", 1030);
+            Transaction transaction5 = new Transaction(TransactionType.DEBIT, LocalDateTime.now().plusHours(1), "Compra de algo random", 1030);
             Transaction transaction6 = new Transaction(TransactionType.CREDIT, LocalDateTime.now().plusHours(2), "Transferencia", 1000);
 
             Loan hipotecario = new Loan("Hipotecario", 500000, new ArrayList<Integer>() {{
@@ -59,14 +59,15 @@ public class HomebankingApplication {
                 add(24);
                 add(36);
             }});
-            ClientLoan prestamo1 = new ClientLoan(400000,60,melba,hipotecario);
-            ClientLoan prestamo2 = new ClientLoan(50000,12,melba,personal);
-            ClientLoan prestamo3 = new ClientLoan(100000,24,juan,personal);
-            ClientLoan prestamo4 = new ClientLoan(200000,36,juan,automotriz);
+            ClientLoan prestamo1 = new ClientLoan(400000, 60);
+            ClientLoan prestamo2 = new ClientLoan(50000, 12);
+            ClientLoan prestamo3 = new ClientLoan(100000, 24, juan, personal);
+            ClientLoan prestamo4 = new ClientLoan(200000, 36, juan, automotriz);
 
-
-
-
+            prestamo1.addClient(melba);
+            prestamo1.addLoan(hipotecario);
+            prestamo2.addClient(melba);
+            prestamo2.addLoan(personal);
 
             //RELACIONES
             vin001.addTransaction(transaction1);
@@ -78,8 +79,6 @@ public class HomebankingApplication {
             melba.addAccounts(vin001);
             melba.addAccounts(vin002);
             juan.addAccounts(vin003);
-
-
             //INGRESO A REPOSITORIOS
             clientRepository.save(melba);
             clientRepository.save(juan);
@@ -93,9 +92,9 @@ public class HomebankingApplication {
             transactionRepository.save(transaction4);
             transactionRepository.save(transaction5);
             transactionRepository.save(transaction6);
-			loanRepository.save(hipotecario);
-			loanRepository.save(personal);
-			loanRepository.save(automotriz);
+            loanRepository.save(hipotecario);
+            loanRepository.save(personal);
+            loanRepository.save(automotriz);
             clientLoanRepository.save(prestamo1);
             clientLoanRepository.save(prestamo2);
             clientLoanRepository.save(prestamo3);

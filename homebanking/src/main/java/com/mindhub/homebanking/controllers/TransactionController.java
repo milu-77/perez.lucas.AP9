@@ -1,8 +1,6 @@
 package com.mindhub.homebanking.controllers;
 
-import com.mindhub.homebanking.dtos.ClientDTO;
 import com.mindhub.homebanking.dtos.TransactionDTO;
-import com.mindhub.homebanking.repositories.AccountRepository;
 import com.mindhub.homebanking.repositories.TransactionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,22 +12,22 @@ import java.util.List;
 
 import static java.util.stream.Collectors.toList;
 
-@RestController( )
-@RequestMapping( "/api/")
+@RestController()
+@RequestMapping("/api/")
 public class TransactionController {
     @Autowired
-    private TransactionRepository transactionRepository ;
-    @GetMapping( "/transactions")
-    public List<TransactionDTO> getTransactions () {
-        List<TransactionDTO> transactions = transactionRepository.findAll().stream()
-                .map(transaction -> new TransactionDTO(transaction))
-                .collect(toList());
-        return transactions;
-    }
-    @GetMapping ( "/transactions/{code}")
-    public TransactionDTO getTransaction (@PathVariable Long code) {
+    private TransactionRepository transactionRepository;
 
-        TransactionDTO transaction = new TransactionDTO(   transactionRepository.findById(code).get());
-        return transaction;
+    @GetMapping("/transactions")
+    public List<TransactionDTO> getTransactions() {
+        return transactionRepository.findAll().stream()
+                .map(TransactionDTO::new)
+                .collect(toList());
+    }
+
+    @GetMapping("/transactions/{code}")
+    public TransactionDTO getTransaction(@PathVariable Long code) {
+
+        return new TransactionDTO(transactionRepository.findById(code).orElseThrow());
     }
 }

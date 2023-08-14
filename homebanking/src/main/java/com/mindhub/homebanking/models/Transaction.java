@@ -14,8 +14,8 @@ public class Transaction {
     @GenericGenerator(name = "native", strategy = "native")
     private Long id;
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name="account_id")
-    private Account account ;
+    @JoinColumn(name = "account_id")
+    private Account account;
     private TransactionType type;
     private LocalDateTime date;
     private String description;
@@ -32,8 +32,7 @@ public class Transaction {
     }
 
     public void setAccount(Account account) {
-
-        this.account =    account ;
+        this.account = account;
     }
 
     public void setType(TransactionType type) {
@@ -55,8 +54,9 @@ public class Transaction {
     public Long getId() {
         return id;
     }
-     public AccountDTO getAccount() {
-        return new AccountDTO(account );
+
+    public AccountDTO getAccount() {
+        return new AccountDTO(account);
     }
 
     public TransactionType getType() {
