@@ -1,10 +1,11 @@
 package com.mindhub.homebanking.models;
 
-import net.minidev.json.annotate.JsonIgnore;
+
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 @Entity
@@ -16,10 +17,24 @@ public class Client {
     private String firstName;
     private String lastName;
     private String email;
+    private String password;
+
     @OneToMany(mappedBy = "holder", fetch = FetchType.EAGER)
     Set<Account> accounts = new HashSet<>();
     @OneToMany(mappedBy = "client", fetch = FetchType.EAGER)
     Set<ClientLoan> clientLoans = new HashSet<>();
+
+
+    @OneToMany(mappedBy = "cardHolder", orphanRemoval = true)
+    private Set<Card> cards = new LinkedHashSet<>();
+
+    public Set<Card> getCards() {
+        return cards;
+    }
+
+    public void setCards(Set<Card> cards) {
+        this.cards = cards;
+    }
 
 
     public Client() {
@@ -47,6 +62,10 @@ public class Client {
         return email;
     }
 
+    public String getPassword() {
+        return password;
+    }
+
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
@@ -72,7 +91,10 @@ public class Client {
         this.accounts.add(account);
     }
 
-    @JsonIgnore
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     public Set<ClientLoan> getClientLoans() {
         return clientLoans;
     }
@@ -80,5 +102,10 @@ public class Client {
     public void setLoan(ClientLoan loan) {
         this.clientLoans.add(loan);
         loan.setClient(this);
+    }
+
+    public void addCard(Card card1) {
+        this.cards.add(card1);
+        card1.setClient(this);
     }
 }

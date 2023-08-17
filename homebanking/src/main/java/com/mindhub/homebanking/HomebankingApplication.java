@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Bean;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 
 @SpringBootApplication
 public class HomebankingApplication {
@@ -22,7 +23,8 @@ public class HomebankingApplication {
                                       AccountRepository accountRepository,
                                       TransactionRepository transactionRepository,
                                       LoanRepository loanRepository,
-                                      ClientLoanRepository clientLoanRepository) {
+                                      ClientLoanRepository clientLoanRepository,
+                                      CardRepository cardRepository) {
         return (args) -> {
             // save a couple of customers
             //OBJETOS
@@ -64,6 +66,11 @@ public class HomebankingApplication {
             ClientLoan prestamo3 = new ClientLoan(100000, 24, juan, personal);
             ClientLoan prestamo4 = new ClientLoan(200000, 36, juan, automotriz);
 
+            Card card1 = new Card(CardType.DEBIT, CardColor.GOLD, LocalDateTime.now());
+            Card card2 = new Card(CardType.CREDIT, CardColor.TITANIUM, "4117-9603-8636-9162", "456", LocalDateTime.now().plusYears(5), LocalDateTime.now());
+            Card card3 = new Card(CardType.CREDIT, CardColor.SILVER, LocalDateTime.now());
+
+
             prestamo1.addClient(melba);
             prestamo1.addLoan(hipotecario);
             prestamo2.addClient(melba);
@@ -79,6 +86,10 @@ public class HomebankingApplication {
             melba.addAccounts(vin001);
             melba.addAccounts(vin002);
             juan.addAccounts(vin003);
+            melba.addCard(card1);
+            melba.addCard(card2);
+            juan.addCard(card3);
+
             //INGRESO A REPOSITORIOS
             clientRepository.save(melba);
             clientRepository.save(juan);
@@ -99,6 +110,9 @@ public class HomebankingApplication {
             clientLoanRepository.save(prestamo2);
             clientLoanRepository.save(prestamo3);
             clientLoanRepository.save(prestamo4);
+            cardRepository.save(card1);
+            cardRepository.save(card2);
+            cardRepository.save(card3);
 
 
         };
