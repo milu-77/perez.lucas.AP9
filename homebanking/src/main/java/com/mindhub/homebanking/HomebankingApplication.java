@@ -2,10 +2,12 @@ package com.mindhub.homebanking;
 
 import com.mindhub.homebanking.models.*;
 import com.mindhub.homebanking.repositories.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -14,9 +16,13 @@ import java.util.Date;
 @SpringBootApplication
 public class HomebankingApplication {
 
+
     public static void main(String[] args) {
         SpringApplication.run(HomebankingApplication.class, args);
     }
+
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
     @Bean
     public CommandLineRunner initData(ClientRepository clientRepository,
@@ -28,9 +34,9 @@ public class HomebankingApplication {
         return (args) -> {
             // save a couple of customers
             //OBJETOS
-            Client melba = new Client("Melba ", "Morel ", "Melba@morel.com");
-            Client juan = new Client("Juan", "Salvo ", "juan@salvo.com");
-            Client martita = new Client("Martita", "Salvo ", "martita@salvo.com");
+            Client melba = new Client("Melba ", "Morel ", "melba@morel.com", passwordEncoder.encode("123"));
+            Client juan = new Client("Juan", "Salvo ", "juan@salvo.com", passwordEncoder.encode("123"));
+            Client martita = new Client("Martita", "Salvo ", "martita@salvo.com", passwordEncoder.encode("123"));
 
             Account vin001 = new Account("VIN001", LocalDateTime.now(), 5000);
             Account vin002 = new Account("VIN002", LocalDateTime.now().plusHours(24), 7500);
@@ -63,8 +69,8 @@ public class HomebankingApplication {
             }});
             ClientLoan prestamo1 = new ClientLoan(400000, 60);
             ClientLoan prestamo2 = new ClientLoan(50000, 12);
-            ClientLoan prestamo3 = new ClientLoan(100000, 24, juan, personal);
-            ClientLoan prestamo4 = new ClientLoan(200000, 36, juan, automotriz);
+            ClientLoan prestamo3 = new ClientLoan(100000, 24);
+            ClientLoan prestamo4 = new ClientLoan(200000, 36);
 
             Card card1 = new Card(CardType.DEBIT, CardColor.GOLD, LocalDateTime.now());
             Card card2 = new Card(CardType.CREDIT, CardColor.TITANIUM, "4117-9603-8636-9162", "456", LocalDateTime.now().plusYears(5), LocalDateTime.now());
@@ -75,6 +81,10 @@ public class HomebankingApplication {
             prestamo1.addLoan(hipotecario);
             prestamo2.addClient(melba);
             prestamo2.addLoan(personal);
+            prestamo3.addClient(juan);
+            prestamo3.addLoan(personal);
+            prestamo4.addClient(juan);
+            prestamo4.addLoan(automotriz);
 
             //RELACIONES
             vin001.addTransaction(transaction1);
@@ -117,4 +127,5 @@ public class HomebankingApplication {
 
         };
     }
+
 }

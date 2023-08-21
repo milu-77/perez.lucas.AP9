@@ -14,12 +14,11 @@ Vue.createApp({
     methods: {
         // load and display JSON sent by server for /clients
         loadData() {
-            axios.get("api/clients")
+            axios.get("/clients")
                 .then((response) => {
                     // handle success
                     this.outPut = response.data;
-                    this.clients = response.data;
-                    console.log(response.data);
+                    this.clients = response.data._embedded.clients;
                 })
                 .catch((error) => {
                     alert("Error loading clients: " + error)
