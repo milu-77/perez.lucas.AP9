@@ -1,8 +1,11 @@
 package com.mindhub.homebanking.controllers;
 
 import com.mindhub.homebanking.dtos.TransactionDTO;
+import com.mindhub.homebanking.models.Transaction;
 import com.mindhub.homebanking.repositories.TransactionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,14 +23,16 @@ public class TransactionController {
 
     @GetMapping("/transactions")
     public List<TransactionDTO> getTransactions() {
-        return transactionRepository.findAll().stream()
-                .map(TransactionDTO::new)
-                .collect(toList());
+        return transactionRepository.findAll().stream().map(TransactionDTO::new).collect(toList());
     }
 
     @GetMapping("/transactions/{code}")
-    public TransactionDTO getTransaction(@PathVariable Long code) {
-
-        return new TransactionDTO(transactionRepository.findById(code).orElseThrow());
+    public ResponseEntity<Object> getTransaction(@PathVariable Long code) {
+        Transaction transaction = transactionRepository.findById(code).orElse(null);
+        if (transaction == null) {
+            return new ResponseEntity<>("Recurso No encontrado", HttpStatus.BAD_GATEWAY);
+        } else {
+            return new ResponseEntity<>(new TransactionDTO(transaction), HttpStatus.ACCEPTED);
+        }
     }
 }

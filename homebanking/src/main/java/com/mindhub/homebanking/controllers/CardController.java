@@ -28,7 +28,6 @@ public class CardController {
 
     @GetMapping("/cards/{code}")
     public CardDTO getClients(@PathVariable Long code) {
-
         return new CardDTO(cardRepository.findById(code).orElseThrow());
     }
 }

@@ -13,14 +13,14 @@ public class AccountDTO {
     private long id;
     private String number;
 
-    private LocalDateTime date;
+    private LocalDateTime creationDate;
     private float balance;
     Set<TransactionDTO> transactions = new HashSet<>();
 
     public AccountDTO(Account account) {
         this.id = account.getId();
         this.number = account.getNumber();
-        this.date = account.getDate();
+        this.creationDate = account.getDate();
         this.balance = account.getBalance();
         this.transactions = account.getTransaction().stream()
                 .map(TransactionDTO::new)
@@ -37,12 +37,13 @@ public class AccountDTO {
         return number;
     }
 
-    public LocalDateTime getDate() {
-        return date;
-    }
 
     public float getBalance() {
         return balance;
+    }
+
+    public LocalDateTime getCreationDate() {
+        return creationDate;
     }
 
     public Set<TransactionDTO> getTransactions() {

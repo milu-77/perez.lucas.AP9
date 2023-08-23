@@ -2,10 +2,12 @@ package com.mindhub.homebanking.models;
 
 
 import org.hibernate.annotations.GenericGenerator;
+import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -27,6 +29,13 @@ public class Client {
 
     @OneToMany(mappedBy = "cardHolder", orphanRemoval = true)
     private Set<Card> cards = new LinkedHashSet<>();
+    public Client(String firstName, String lastName, String email, String encode) {
+        this.lastName = lastName;
+        this.firstName = firstName;
+        this.email = email;
+        this.password = encode;
+    }
+
 
     public Set<Card> getCards() {
         return cards;
@@ -40,11 +49,6 @@ public class Client {
     public Client() {
     }
 
-    public Client(String firstName, String lastName, String email) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-    }
 
     public Long getId() {
         return id;

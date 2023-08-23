@@ -33,8 +33,8 @@ public class Account {
         this.balance = balance;
     }
 
-    public Account(String empty) {
-        this.number = null;
+    public Account(int a) {
+        this.number = "0";
         this.date = null;
         this.balance = 0;
         this.transaction=null;
