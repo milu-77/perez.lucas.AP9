@@ -14,11 +14,9 @@ public class CardDTO {
     private String number;
     private String cvv;
     private LocalDateTime truDate;
-    private LocalDateTime fromDate;
 
     public CardDTO() {
     }
-
 
     public CardDTO(Card card) {
         this.cardHolder = card.getCardHolder().getFirstName() + card.getCardHolder().getLastName();
@@ -28,8 +26,7 @@ public class CardDTO {
         this.number = card.getNumber();
         this.cvv = card.getCvv();
         this.truDate = card.getTruDate();
-        this.fromDate = card.getFromDate();
-    }
+     }
 
     public Long getId() {
         return id;
@@ -55,10 +52,7 @@ public class CardDTO {
         return truDate;
     }
 
-
-
     public String getCardHolder() {
         return cardHolder;
     }
 }
-

@@ -7,26 +7,24 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static java.util.stream.Collectors.toList;
 
 public class AccountDTO {
+    public String mailHolder;
     private long id;
     private String number;
-
-    private LocalDateTime date;
+    private LocalDateTime Date;
     private float balance;
     Set<TransactionDTO> transactions = new HashSet<>();
 
     public AccountDTO(Account account) {
         this.id = account.getId();
         this.number = account.getNumber();
-        this.date = account.getDate();
+        this.Date = account.getDate();
         this.balance = account.getBalance();
         this.transactions = account.getTransaction().stream()
                 .map(TransactionDTO::new)
                 .collect(Collectors.toSet());
-
-
+        mailHolder=account.getHolder().getEmail();
     }
 
     public long getId() {
@@ -37,15 +35,18 @@ public class AccountDTO {
         return number;
     }
 
-    public LocalDateTime getDate() {
-        return date;
-    }
-
     public float getBalance() {
         return balance;
     }
 
+    public LocalDateTime getDate() {
+        return Date;
+    }
+
     public Set<TransactionDTO> getTransactions() {
         return transactions;
+    }
+
+    public String getMailHolder() {return mailHolder;
     }
 }

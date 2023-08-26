@@ -23,10 +23,10 @@ public class Transaction {
     public Transaction() {
     }
 
-    public Transaction(TransactionType type, LocalDateTime date, String desciption, float amount) {
+    public Transaction(TransactionType type, LocalDateTime date, String description, float amount) {
         this.type = type;
         this.date = date;
-        this.description = desciption;
+        this.description = description;
         this.amount = amount;
     }
 
@@ -42,8 +42,8 @@ public class Transaction {
         this.date = date;
     }
 
-    public void setDesciption(String desciption) {
-        this.description = desciption;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public void setAmount(float amount) {

@@ -40,7 +40,7 @@ public class Card {
         this.cardHolder = cardholder;
         this.cardType = cardType;
         this.cardColor = cardColor;
-        this.number = Card.generateNumber();
+        this.number = Card.newNumberCard();
         this.cvv = Card.generateCvn();
         this.truDate = Card.generateTruDate(fromDate, 5);
         this.fromDate = fromDate;
@@ -58,10 +58,45 @@ public class Card {
     public Card(CardType cardType, CardColor cardColor, LocalDateTime fromDate) {
         this.cardType = cardType;
         this.cardColor = cardColor;
-        this.number = Card.generateNumber();
+        this.number = Card.newNumberCard();
         this.cvv = Card.generateCvn();
         this.truDate = Card.generateTruDate(fromDate, 5);
         this.fromDate = fromDate;
+    }
+
+    public Card(String cardType, String cardColor) {
+        this.cardType =CardType.returnType(cardType);
+        this.cardColor = CardColor.returnColor(cardColor);
+        this.number = Card.newNumberCard();
+        this.cvv = Card.generateCvn();
+        this.truDate = Card.generateTruDate(LocalDateTime.now(), 5);
+        this.fromDate = LocalDateTime.now();
+    }
+
+    public Card(String cardType, String cardColor, String number) {
+        this.cardType =CardType.returnType(cardType);
+        this.cardColor = CardColor.returnColor(cardColor);
+        this.number = number;
+        this.cvv = Card.generateCvn();
+        this.truDate = Card.generateTruDate(LocalDateTime.now(), 5);
+        this.fromDate = LocalDateTime.now();
+    }
+
+    public static String newNumberCard() {
+        StringBuilder number = new StringBuilder();
+        Random random = new Random();
+        number.append(random.nextInt(10000));
+        number.append("-");
+        LocalDateTime date = LocalDateTime.now();
+        if (date.getMonthValue() < 10) number.append(0);
+        number.append(date.getMonthValue());
+        number.append(random.nextInt(100));
+        number.append("-");
+        number.append(date.getYear() % 100);
+        number.append(random.nextInt(100));
+        number.append("-");
+        number.append(random.nextInt(10000));
+        return number.toString();
     }
 
 
@@ -133,27 +168,14 @@ public class Card {
         StringBuilder cvn = new StringBuilder();
         Random random = new Random();
         for (int a = 0; a < 3; a++) {
-            int randomNumber = random.nextInt(10); // Genera números entre 0 (inclusive) y 1000 (exclusive)
+            int randomNumber = random.nextInt(10);
             cvn.append(randomNumber);
         }
 
-
-        return cvn.toString();
+        return String.valueOf(cvn);
     }
 
-    private static String generateNumber() {
-        StringBuilder number = new StringBuilder();
-        Random random = new Random();
-        for (int a = 0; a < 16; a++) {
-            int randomNumber = random.nextInt(10); // Genera números entre 0 (inclusive) y 1000 (exclusive)
-            if (a % 4 == 0 && a != 0) {
-                number.append("-");
-            }
-            number.append(randomNumber);
-        }
 
-        return number.toString();
-    }
 
     private static LocalDateTime generateTruDate(LocalDateTime fromDate, int years) {
         return fromDate.plusYears(years);

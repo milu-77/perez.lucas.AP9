@@ -37,6 +37,7 @@ public class HomebankingApplication {
             Client melba = new Client("Melba ", "Morel ", "melba@morel.com", passwordEncoder.encode("123"));
             Client juan = new Client("Juan", "Salvo ", "juan@salvo.com", passwordEncoder.encode("123"));
             Client martita = new Client("Martita", "Salvo ", "martita@salvo.com", passwordEncoder.encode("123"));
+            Client admin = new Client("admin ", "admin ", "admin@admin.com", passwordEncoder.encode("123"));
 
             Account vin001 = new Account("VIN001", LocalDateTime.now(), 5000);
             Account vin002 = new Account("VIN002", LocalDateTime.now().plusHours(24), 7500);
@@ -104,6 +105,7 @@ public class HomebankingApplication {
             clientRepository.save(melba);
             clientRepository.save(juan);
             clientRepository.save(martita);
+            clientRepository.save(admin);
             accountRepository.save(vin001);
             accountRepository.save(vin002);
             accountRepository.save(vin003);

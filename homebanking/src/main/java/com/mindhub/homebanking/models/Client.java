@@ -7,8 +7,7 @@ import org.springframework.security.core.GrantedAuthority;
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Set;
+ import java.util.Set;
 
 @Entity
 public class Client {
@@ -26,12 +25,12 @@ public class Client {
     @OneToMany(mappedBy = "client", fetch = FetchType.EAGER)
     Set<ClientLoan> clientLoans = new HashSet<>();
 
-
     @OneToMany(mappedBy = "cardHolder", orphanRemoval = true)
     private Set<Card> cards = new LinkedHashSet<>();
 
+
     public Client(String firstName, String lastName, String email, String encode) {
-        this.firstName = firstName;
+        this.lastName = lastName;
         this.firstName = firstName;
         this.email = email;
         this.password = encode;
@@ -112,5 +111,18 @@ public class Client {
     public void addCard(Card card1) {
         this.cards.add(card1);
         card1.setClient(this);
+    }
+    public int numAccounts (){
+        return accounts.size();
+    }
+
+    public Long numCard(String cardType) {
+        return cards.stream()
+                .filter(card -> card.getCardType().name().equals(cardType))
+               .count();
+    }
+
+    public boolean hasCards() {
+        return !this.cards.isEmpty();
     }
 }
