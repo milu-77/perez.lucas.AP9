@@ -32,15 +32,21 @@ public class ClientController {
     private AccountRepository accountRepository;
 
     @GetMapping("/clients")
-    public ResponseEntity<Object>getClients(Authentication authentication) {
-        if (authentication.getName().contains("admin@admin.com")) {
-            List<ClientDTO> client = clientRepository.findAll().stream()
-                    .map(ClientDTO::new)
-                    .collect(toList());
-            return new ResponseEntity<>(client, HttpStatus.ACCEPTED);
-        } else {
-            return new ResponseEntity<>("No tiene permiso de acceso a este recurso", HttpStatus.BAD_GATEWAY);
+    public ResponseEntity<Object> getClients(Authentication authentication) {
+        Client client =  clientRepository.findByEmail(authentication.getName());
+        if (client!=null){
+            if (client.isAdmin()) {
+                List<ClientDTO> clients = clientRepository.findAll().stream()
+                        .map(ClientDTO::new)
+                        .collect(toList());
+                return new ResponseEntity<>(clients, HttpStatus.ACCEPTED);
+            } else {
+                return new ResponseEntity<>("No tiene permiso de acceso a este recurso", HttpStatus.UNAUTHORIZED);
+            }
+        }else{
+            return new ResponseEntity<>("No tiene permiso de acceso a este recurso", HttpStatus.UNAUTHORIZED);
         }
+
     }
 
     @GetMapping("/clients/current")
@@ -54,11 +60,15 @@ public class ClientController {
         if (client == null) {
             return new ResponseEntity<>("Recurso No encontrado", HttpStatus.BAD_GATEWAY);
         } else {
-            if (client.getEmail().equals(authentication.getName()) || authentication.getName().contains("admin@admin.com")) {
+            if (client.getEmail().equals(authentication.getName())) {
+                ClientDTO ClientDTO = new ClientDTO(client);
+                return new ResponseEntity<>(ClientDTO, HttpStatus.ACCEPTED);
+            }
+            if (client.isAdmin()) {
                 ClientDTO ClientDTO = new ClientDTO(client);
                 return new ResponseEntity<>(ClientDTO, HttpStatus.ACCEPTED);
             } else {
-                return new ResponseEntity<>("No tiene permiso de acceso a este recurso", HttpStatus.BAD_GATEWAY);
+                return new ResponseEntity<>("No tiene permiso de acceso a este recurso", HttpStatus.UNAUTHORIZED);
             }
         }
     }
@@ -68,20 +78,29 @@ public class ClientController {
     public ResponseEntity<Object> register(
             @RequestParam String firstName, @RequestParam String lastName,
             @RequestParam String email, @RequestParam String password) {
-        if (firstName.isEmpty() || lastName.isEmpty() || email.isEmpty() || password.isEmpty()) {
+        if (firstName.isEmpty()) {
+            return new ResponseEntity<>("Missing data", HttpStatus.FORBIDDEN);
+        }
+        if (lastName.isEmpty()) {
+            return new ResponseEntity<>("Missing data", HttpStatus.FORBIDDEN);
+        }
+        if (email.isEmpty()) {
+            return new ResponseEntity<>("Missing data", HttpStatus.FORBIDDEN);
+        }
+        if (password.isEmpty()) {
             return new ResponseEntity<>("Missing data", HttpStatus.FORBIDDEN);
         }
         if (clientRepository.findByEmail(email) != null) {
             return new ResponseEntity<>("Name already in use", HttpStatus.FORBIDDEN);
         }
         Client client = new Client(firstName, lastName, email, passwordEncoder.encode(password));
-        String number = String.valueOf(Account.newNumberAccount());
-         while (accountRepository.findByNumber(number) != null) number = String.valueOf(Account.newNumberAccount());
-        Account account = new Account(number,  0) ;
+        String number = Account.newNumberAccount();
+        while (accountRepository.findByNumber(number) != null) number = String.valueOf(Account.newNumberAccount());
+        Account account = new Account(number, 0);
         client.addAccounts(account);
         clientRepository.save(client);
         accountRepository.save(account);
-        return new ResponseEntity<>("Cuenta de usuario Creada",HttpStatus.CREATED);
+        return new ResponseEntity<>("Cuenta de usuario Creada", HttpStatus.CREATED);
     }
 
 }

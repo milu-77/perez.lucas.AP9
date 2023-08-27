@@ -65,8 +65,8 @@ public class Card {
     }
 
     public Card(String cardType, String cardColor) {
-        this.cardType =CardType.returnType(cardType);
-        this.cardColor = CardColor.returnColor(cardColor);
+        this.cardType = Card.returnType(cardType);
+        this.cardColor = Card.returnColor(cardColor);
         this.number = Card.newNumberCard();
         this.cvv = Card.generateCvn();
         this.truDate = Card.generateTruDate(LocalDateTime.now(), 5);
@@ -74,30 +74,15 @@ public class Card {
     }
 
     public Card(String cardType, String cardColor, String number) {
-        this.cardType =CardType.returnType(cardType);
-        this.cardColor = CardColor.returnColor(cardColor);
+        this.cardType = Card.returnType(cardType);
+        this.cardColor = Card.returnColor(cardColor);
         this.number = number;
         this.cvv = Card.generateCvn();
         this.truDate = Card.generateTruDate(LocalDateTime.now(), 5);
         this.fromDate = LocalDateTime.now();
     }
 
-    public static String newNumberCard() {
-        StringBuilder number = new StringBuilder();
-        Random random = new Random();
-        number.append(random.nextInt(10000));
-        number.append("-");
-        LocalDateTime date = LocalDateTime.now();
-        if (date.getMonthValue() < 10) number.append(0);
-        number.append(date.getMonthValue());
-        number.append(random.nextInt(100));
-        number.append("-");
-        number.append(date.getYear() % 100);
-        number.append(random.nextInt(100));
-        number.append("-");
-        number.append(random.nextInt(10000));
-        return number.toString();
-    }
+
 
 
     public Client getCardHolder() {
@@ -171,13 +156,40 @@ public class Card {
             int randomNumber = random.nextInt(10);
             cvn.append(randomNumber);
         }
-
         return String.valueOf(cvn);
     }
 
-
-
     private static LocalDateTime generateTruDate(LocalDateTime fromDate, int years) {
         return fromDate.plusYears(years);
+    }
+
+    public static CardColor returnColor(String cardColor) {
+        if (cardColor.equalsIgnoreCase("GOLD")) {
+            return CardColor.GOLD;
+        }
+        if (cardColor.equalsIgnoreCase("SILVER")) {
+            return CardColor.SILVER;
+        }
+        return CardColor.TITANIUM;
+    }
+
+    public static CardType returnType(String type) {
+        if (type.equalsIgnoreCase("CREDIT")) {
+            return CardType.CREDIT;
+        } else {
+            return CardType.DEBIT;
+        }
+    }
+    public static String newNumberCard() {
+        Random random = new Random();
+        String number = (random.nextInt(9000) + 1000) +
+                "-" +
+                (random.nextInt(9000) + 1000) +
+                "-" +
+                (random.nextInt(9000) + 1000) +
+                "-" +
+                (random.nextInt(9000) + 1000);
+
+        return number;
     }
 }

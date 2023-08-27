@@ -40,26 +40,6 @@ public class Account {
         this.balance = balance;
     }
 
-    public Account(int a) {
-        this.number = "0";
-        this.date = null;
-        this.balance = 0;
-        this.transaction = null;
-        this.holder = null;
-    }
-
-    public static String newNumberAccount() {
-        //PROBLEMA: Se genera solo 1000 cuentas al dia
-        StringBuilder number = new StringBuilder();
-        number.append("VIN-");
-        LocalDateTime date = LocalDateTime.now();
-        number.append(date.getYear() % 100);
-         Random random = new Random();
-        number.append(random.nextInt(1000000));
-        return String.valueOf(number);
-    }
-
-
     public Long getId() {
         return id;
     }
@@ -97,12 +77,23 @@ public class Account {
         this.holder = holder;
     }
 
+    public Set<Transaction> getTransaction() {
+        return transaction;
+    }
+
     public void addTransaction(Transaction transaction) {
         transaction.setAccount(this);
         this.transaction.add(transaction);
     }
 
-    public Set<Transaction> getTransaction() {
-        return transaction;
+    public static String newNumberAccount() {
+        //PROBLEMA: Se genera solo 1000 cuentas al dia
+        StringBuilder number = new StringBuilder();
+        number.append("VIN-");
+        LocalDateTime date = LocalDateTime.now();
+        number.append(date.getYear() % 100);
+        Random random = new Random();
+        number.append(random.nextInt(1000000));
+        return String.valueOf(number);
     }
 }

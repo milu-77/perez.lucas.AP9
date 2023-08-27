@@ -18,6 +18,7 @@ import java.util.List;
 import static java.util.stream.Collectors.toList;
 
 @RestController
+@RequestMapping("/api/")
 public class AccountController<t> {
 
     @Autowired
@@ -25,54 +26,76 @@ public class AccountController<t> {
     @Autowired
     private ClientRepository clientRepository;
 
-    @GetMapping("/api/accounts")
+    @GetMapping("/accounts")
     public ResponseEntity<Object> getAccounts(Authentication authentication) {
-        if (authentication.getName().contains("admin@admin.com")) {
-            List<AccountDTO> accounts = accountRepository.findAll().stream()
-                    .map(AccountDTO::new)
-                    .collect(toList());
-            return new ResponseEntity<>(accounts, HttpStatus.ACCEPTED);
+        Client client = clientRepository.findByEmail(authentication.getName());
+        if (client != null) {
+            if (client.isAdmin()) {
+                List<AccountDTO> accounts = accountRepository.findAll().stream()
+                        .map(AccountDTO::new)
+                        .collect(toList());
+                return new ResponseEntity<>(accounts, HttpStatus.ACCEPTED);
+            } else {
+                return new ResponseEntity<>("No tiene permiso de acceso a este recurso", HttpStatus.UNAUTHORIZED);
+            }
         } else {
-            return new ResponseEntity<>("No tiene permiso de acceso a este recurso", HttpStatus.BAD_GATEWAY);
+            return new ResponseEntity<>("No Se encuentra loggeado", HttpStatus.UNAUTHORIZED);
+
         }
+
     }
 
-    @GetMapping("/api/accounts/{code}")
+    @GetMapping("/accounts/{code}")
     public ResponseEntity<Object> getAccount(@PathVariable Long code, Authentication authentication) {
         Account account = accountRepository.findById(code).orElse(null);
         if (account == null) {
-            return new ResponseEntity<>("Recurso No encontrado", HttpStatus.BAD_GATEWAY);
+            return new ResponseEntity<>("Recurso No encontrado", HttpStatus.NOT_FOUND);
         } else {
-            if (account.getHolder().getEmail().equals(authentication.getName()) || authentication.getName().contains("admin@admin.com")) {
+            if (account.getHolder().getEmail().equals(authentication.getName())) {
+                AccountDTO accountDTO = new AccountDTO(account);
+                return new ResponseEntity<>(accountDTO, HttpStatus.ACCEPTED);
+            }
+            if (account.getHolder().isAdmin()) {
                 AccountDTO accountDTO = new AccountDTO(account);
                 return new ResponseEntity<>(accountDTO, HttpStatus.ACCEPTED);
             } else {
-                return new ResponseEntity<>("No tiene permiso de acceso a este recurso", HttpStatus.BAD_GATEWAY);
+                return new ResponseEntity<>("No tiene permiso de acceso a este recurso", HttpStatus.UNAUTHORIZED);
             }
         }
     }
 
-    @GetMapping("/api/clients/current/accounts")
+    @GetMapping("/clients/current/accounts")
     public ResponseEntity<Object> getAccount(Authentication authentication) {
         Client client = clientRepository.findByEmail(authentication.getName());
         if (client != null) {
             return new ResponseEntity<>(new ClientDTO(client).getAccounts(), HttpStatus.FORBIDDEN);
         } else {
-            return new ResponseEntity<>("No tiene permiso de acceso a este recurso", HttpStatus.BAD_GATEWAY);
+            return new ResponseEntity<>("Recurso no encontrado", HttpStatus.NOT_FOUND);
         }
     }
-    @RequestMapping(path = "/api/clients/current/accounts", method = RequestMethod.POST)
+
+    @RequestMapping(path = "/clients/current/accounts", method = RequestMethod.POST)
     public ResponseEntity<String> createAccount(Authentication authentication) {
         Client client = clientRepository.findByEmail(authentication.getName());
-        if (client.numAccounts() < 3) {
-            String number = Account.newNumberAccount();
-            while (accountRepository.findByNumber(number) != null) number = String.valueOf(Account.newNumberAccount());
-            Account account = new Account(number, 0);
-            client.addAccounts(account);
-            accountRepository.save(account);
-            return new ResponseEntity<>("se pudo crear la cuenta, numero de cuentas: " + client.numAccounts() + " del cliente  " + client.getEmail(), HttpStatus.CREATED);
+        if (client != null) {
+            if (client.numAccounts() < 3) {
+                String number = Account.newNumberAccount();
+                while (accountRepository.findByNumber(number) != null) {
+                    number = String.valueOf(Account.newNumberAccount());
+                }
+                Account account = new Account(number, 0);
+                client.addAccounts(account);
+                accountRepository.save(account);
+                return new ResponseEntity<>("se pudo crear la cuenta, numero de cuentas: " +
+                        client.numAccounts() +
+                        " del cliente  " +
+                        client.getEmail(), HttpStatus.CREATED);
+            } else {
+                return new ResponseEntity<>("Cliente con tres cuentas, imposible agregar mas", HttpStatus.FORBIDDEN);
+            }
         } else {
-            return new ResponseEntity<>("Cliente con tres cuentas, imposible agregar mas", HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>("Cliente inexistente", HttpStatus.FORBIDDEN);
+
         }
     }
 }

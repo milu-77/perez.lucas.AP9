@@ -26,44 +26,63 @@ public class CardController {
     private ClientRepository clientRepository;
 
     @GetMapping("/cards")
-    public ResponseEntity<Object> getCards(Authentication authentication) {
-        if (authentication.getName().contains("admin@admin.com")) {
-            List<CardDTO> cards = cardRepository.findAll().stream()
-                    .map(CardDTO::new)
-                    .collect(toList());
-            return new ResponseEntity<>(cards, HttpStatus.ACCEPTED);
+    public ResponseEntity<Object> getAllCards(Authentication authentication) {
+        Client client = clientRepository.findByEmail(authentication.getName());
+        if (client != null) {
+            if (client.isAdmin()) {
+                List<CardDTO> cards = cardRepository.findAll().stream()
+                        .map(CardDTO::new)
+                        .collect(toList());
+                return new ResponseEntity<>(cards, HttpStatus.ACCEPTED);
+            } else {
+                return new ResponseEntity<>("No tiene permiso de acceso a este recurso", HttpStatus.FORBIDDEN);
+            }
         } else {
-            return new ResponseEntity<>("No tiene permiso de acceso a este recurso", HttpStatus.BAD_GATEWAY);
+            return new ResponseEntity<>("No tiene permiso de acceso a este recurso", HttpStatus.FORBIDDEN);
+
         }
+
+
     }
 
 
     @GetMapping("/cards/{code}")
-    public ResponseEntity<Object>  getClients(@PathVariable Long code,Authentication authentication) {
-        Card card = cardRepository.findById(code).orElse(null);
-        if (card == null) {
-            return new ResponseEntity<>("Recurso No encontrado", HttpStatus.BAD_GATEWAY);
-        } else {
-            if ( card.getCardHolder().getEmail().equals(authentication.getName()) || authentication.getName().contains("admin@admin.com")) {
-                CardDTO cardDTO = new CardDTO(card);
-                return new ResponseEntity<>(cardDTO, HttpStatus.ACCEPTED);
+    public ResponseEntity<Object> getCardById(@PathVariable Long code, Authentication authentication) {
+        Client client = clientRepository.findByEmail(authentication.getName());
+        if (client != null) {
+            Card card = cardRepository.findById(code).orElse(null);
+            if (card == null) {
+                return new ResponseEntity<>("Recurso No encontrado", HttpStatus.NOT_FOUND);
             } else {
-                return new ResponseEntity<>("No tiene permiso de acceso a este recurso", HttpStatus.BAD_GATEWAY);
+                if (client.isAdmin()) {
+                    CardDTO cardDTO = new CardDTO(card);
+                    return new ResponseEntity<>(cardDTO, HttpStatus.ACCEPTED);
+                }
+                if (client.getEmail().equals(  card.getCardHolder().getEmail())) {
+                    CardDTO cardDTO = new CardDTO(card);
+                    return new ResponseEntity<>(cardDTO, HttpStatus.ACCEPTED);
+                }
+                else {
+                    return new ResponseEntity<>("No tiene permiso de acceso a este recurso", HttpStatus.UNAUTHORIZED);
+                }
             }
         }
-     }
+        return new ResponseEntity<>("No tiene permiso de acceso a este recurso", HttpStatus.UNAUTHORIZED);
+    }
 
     @GetMapping("clients/current/cards")
-    public ResponseEntity<Object> getCard(Authentication authentication) {
+    public ResponseEntity<Object> getCardsClient(Authentication authentication) {
         Client client = clientRepository.findByEmail(authentication.getName());
         if (client != null) {
             if (client.hasCards()) {
                 return new ResponseEntity<>(new ClientDTO(client).getCards(), HttpStatus.ACCEPTED);
-            } else {
+            }
+
+            else {
                 return new ResponseEntity<>("Cliente Sin tarjetas", HttpStatus.FORBIDDEN);
             }
         } else {
-            return new ResponseEntity<>("Cliente inexistente", HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>("Cliente inexistente", HttpStatus.NOT_FOUND);
         }
     }
 
@@ -73,19 +92,25 @@ public class CardController {
                                              Authentication authentication) {
         Client client = clientRepository.findByEmail(authentication.getName());
         if (client != null) {
-            if (client.numCard(cardType) < 3) {
+            if (client.CanCard(cardType)) {
                 String number = Card.newNumberCard();
-                while (cardRepository.findByNumber(number) != null) number = String.valueOf(Account.newNumberAccount());
+                while (cardRepository.findByNumber(number) != null){
+                    number = String.valueOf(Account.newNumberAccount());
+                }
                 Card card = new Card(cardType, cardColor, number);
                 client.addCard(card);
                 cardRepository.save(card);
-                return new ResponseEntity<>("se puede Crear ! Tarjetas: " + client.numCard(cardType) + " el cliente es " + client.getEmail(), HttpStatus.CREATED);
+                return new ResponseEntity<>("se pudo Crear ! Tarjetas: " +
+                        client.numCard(cardType) +
+                        " el cliente es " +
+                        client.getEmail(), HttpStatus.CREATED);
             } else {
-                return new ResponseEntity<>("Cliente con tres Tarjetas de tipo: " + cardType + ", imposible agregar mas", HttpStatus.FORBIDDEN);
+                return new ResponseEntity<>("Cliente con tres Tarjetas de tipo: " +
+                        cardType +
+                        ", imposible agregar mas", HttpStatus.FORBIDDEN);
             }
-        }
-        else{
-            return new ResponseEntity<>("Cliente inexistente", HttpStatus.FORBIDDEN);
+        } else {
+            return new ResponseEntity<>("Cliente inexistente", HttpStatus.NOT_FOUND);
         }
     }
 

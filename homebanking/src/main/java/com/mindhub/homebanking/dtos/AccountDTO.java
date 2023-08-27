@@ -9,11 +9,13 @@ import java.util.stream.Collectors;
 
 
 public class AccountDTO {
-    public String mailHolder;
+
     private long id;
     private String number;
-    private LocalDateTime Date;
+
     private float balance;
+    private LocalDateTime Date;
+    public String mailHolder;
     Set<TransactionDTO> transactions = new HashSet<>();
 
     public AccountDTO(Account account) {
@@ -43,10 +45,9 @@ public class AccountDTO {
         return Date;
     }
 
+    public String getMailHolder() {return mailHolder;
+    }
     public Set<TransactionDTO> getTransactions() {
         return transactions;
-    }
-
-    public String getMailHolder() {return mailHolder;
     }
 }

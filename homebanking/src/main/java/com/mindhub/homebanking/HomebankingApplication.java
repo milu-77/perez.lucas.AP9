@@ -32,12 +32,11 @@ public class HomebankingApplication {
                                       ClientLoanRepository clientLoanRepository,
                                       CardRepository cardRepository) {
         return (args) -> {
-            // save a couple of customers
             //OBJETOS
-            Client melba = new Client("Melba ", "Morel ", "melba@morel.com", passwordEncoder.encode("123"));
-            Client juan = new Client("Juan", "Salvo ", "juan@salvo.com", passwordEncoder.encode("123"));
-            Client martita = new Client("Martita", "Salvo ", "martita@salvo.com", passwordEncoder.encode("123"));
-            Client admin = new Client("admin ", "admin ", "admin@admin.com", passwordEncoder.encode("123"));
+            Client melba = new Client("Melba ", "Morel ", "melba@morel.com", passwordEncoder.encode("123"),Rol.CLIENT);
+            Client juan = new Client("Juan", "Salvo ", "juan@salvo.com", passwordEncoder.encode("123"),Rol.CLIENT);
+            Client martita = new Client("Martita", "Salvo ", "martita@salvo.com", passwordEncoder.encode("123"),Rol.CLIENT);
+            Client admin = new Client("admin ", "admin ", "admin@admin.com", passwordEncoder.encode("123"),Rol.ADMIN);
 
             Account vin001 = new Account("VIN001", LocalDateTime.now(), 5000);
             Account vin002 = new Account("VIN002", LocalDateTime.now().plusHours(24), 7500);

@@ -19,6 +19,7 @@ public class Client {
     private String lastName;
     private String email;
     private String password;
+    private Rol rol;
 
     @OneToMany(mappedBy = "holder", fetch = FetchType.EAGER)
     Set<Account> accounts = new HashSet<>();
@@ -34,6 +35,14 @@ public class Client {
         this.firstName = firstName;
         this.email = email;
         this.password = encode;
+        this.rol = Rol.CLIENT;
+    }
+    public Client(String firstName, String lastName, String email, String encode,Rol rol) {
+        this.lastName = lastName;
+        this.firstName = firstName;
+        this.email = email;
+        this.password = encode;
+        this.rol = rol;
     }
 
 
@@ -121,8 +130,18 @@ public class Client {
                 .filter(card -> card.getCardType().name().equals(cardType))
                .count();
     }
+    public boolean CanCard (String cardType) {
+        long cantCard = cards.stream()
+                .filter(card -> card.getCardType().name().equals(cardType))
+                .count();
+        return cantCard<3;
+    }
 
     public boolean hasCards() {
         return !this.cards.isEmpty();
+    }
+
+    public boolean isAdmin() {
+        return this.rol.ordinal()==0;
     }
 }
