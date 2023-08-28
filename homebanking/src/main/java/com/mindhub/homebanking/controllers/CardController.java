@@ -37,10 +37,7 @@ public class CardController {
             }
         } else {
             return new ResponseEntity<>("No tiene permiso de acceso a este recurso", HttpStatus.FORBIDDEN);
-
         }
-
-
     }
 
 
@@ -90,8 +87,7 @@ public class CardController {
                                              Authentication authentication) {
         Client client = clientRepository.findByEmail(authentication.getName());
         if (client != null) {
-            if (client.CanCardType(cardType)) {
-                if(client.CanCardColor(cardType,cardColor)){
+                if(client.canCard(cardType,cardColor)){
                     String number = Card.newNumberCard();
                     while (cardRepository.findByNumber(number) != null){
                         number = String.valueOf(Account.newNumberAccount());
@@ -103,20 +99,10 @@ public class CardController {
                             client.numCard(cardType) +
                             " el cliente es " +
                             client.getEmail(), HttpStatus.CREATED);
-
-
                 }
                 else {
                     return new ResponseEntity<>("No se puede Crear ese tipo de tarjeta", HttpStatus.FORBIDDEN);
                 }
-
-
-
-            } else {
-                return new ResponseEntity<>("Cliente con tres Tarjetas de tipo: " +
-                        cardType +
-                        ", imposible agregar mas", HttpStatus.FORBIDDEN);
-            }
         } else {
             return new ResponseEntity<>("Cliente inexistente", HttpStatus.NOT_FOUND);
         }

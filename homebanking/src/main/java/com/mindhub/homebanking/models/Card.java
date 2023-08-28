@@ -179,25 +179,5 @@ public class Card {
         return number;
     }
 }
-//    @RequestMapping(path = "/clients/current/accounts", method = RequestMethod.POST)
-//    public ResponseEntity<Object> createAccount(Authentication authentication) {
-//        Client client = clientRepository.findByEmail(authentication.getName());
-//
-//        // Verificar si el cliente ya tiene 3 cuentas registradas
-//        if (client.getAccountSet().size() >= 3) {
-//            return new ResponseEntity<>("You can't have more than 3 accounts.", HttpStatus.FORBIDDEN);
-//        }
-//
-//        // Crear la nueva cuenta
-//        String cuenta = checkingExistRandomNumber();
-//        //controlar si existe cuenta si no{
-//     while (cuentaExiste(cuenta) ){
-//         cuenta = checkingExistRandomNumber();
-//     }
-//        Account account = new Account(cuenta, LocalDate.now(),0.0);
-//        client.addAccountSet(account);
-//        accountRepository.save(account);
-//
-//        return new ResponseEntity<>("Account created successfully.", HttpStatus.CREATED);
-//    }
+
 
