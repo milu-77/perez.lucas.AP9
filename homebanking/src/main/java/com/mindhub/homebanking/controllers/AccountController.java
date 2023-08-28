@@ -48,7 +48,7 @@ public class AccountController<t> {
     @GetMapping("/accounts/{code}")
     public ResponseEntity<Object> getAccount(@PathVariable Long code, Authentication authentication) {
         Account account = accountRepository.findById(code).orElse(null);
-        if (account == null) {
+         if (account == null) {
             return new ResponseEntity<>("Recurso No encontrado", HttpStatus.NOT_FOUND);
         } else {
             if (account.getHolder().getEmail().equals(authentication.getName())) {

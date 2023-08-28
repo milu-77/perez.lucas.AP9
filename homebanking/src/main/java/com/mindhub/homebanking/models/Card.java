@@ -64,18 +64,18 @@ public class Card {
         this.fromDate = fromDate;
     }
 
-    public Card(String cardType, String cardColor) {
-        this.cardType = Card.returnType(cardType);
-        this.cardColor = Card.returnColor(cardColor);
+    public Card(CardType cardType, CardColor cardColor) {
+        this.cardType = cardType;
+        this.cardColor = cardColor;
         this.number = Card.newNumberCard();
         this.cvv = Card.generateCvn();
         this.truDate = Card.generateTruDate(LocalDateTime.now(), 5);
         this.fromDate = LocalDateTime.now();
     }
 
-    public Card(String cardType, String cardColor, String number) {
-        this.cardType = Card.returnType(cardType);
-        this.cardColor = Card.returnColor(cardColor);
+    public Card(CardType cardType, CardColor cardColor, String number) {
+        this.cardType = cardType;
+        this.cardColor = cardColor;
         this.number = number;
         this.cvv = Card.generateCvn();
         this.truDate = Card.generateTruDate(LocalDateTime.now(), 5);
@@ -163,23 +163,9 @@ public class Card {
         return fromDate.plusYears(years);
     }
 
-    public static CardColor returnColor(String cardColor) {
-        if (cardColor.equalsIgnoreCase("GOLD")) {
-            return CardColor.GOLD;
-        }
-        if (cardColor.equalsIgnoreCase("SILVER")) {
-            return CardColor.SILVER;
-        }
-        return CardColor.TITANIUM;
-    }
 
-    public static CardType returnType(String type) {
-        if (type.equalsIgnoreCase("CREDIT")) {
-            return CardType.CREDIT;
-        } else {
-            return CardType.DEBIT;
-        }
-    }
+
+
     public static String newNumberCard() {
         Random random = new Random();
         String number = (random.nextInt(9000) + 1000) +
@@ -193,3 +179,25 @@ public class Card {
         return number;
     }
 }
+//    @RequestMapping(path = "/clients/current/accounts", method = RequestMethod.POST)
+//    public ResponseEntity<Object> createAccount(Authentication authentication) {
+//        Client client = clientRepository.findByEmail(authentication.getName());
+//
+//        // Verificar si el cliente ya tiene 3 cuentas registradas
+//        if (client.getAccountSet().size() >= 3) {
+//            return new ResponseEntity<>("You can't have more than 3 accounts.", HttpStatus.FORBIDDEN);
+//        }
+//
+//        // Crear la nueva cuenta
+//        String cuenta = checkingExistRandomNumber();
+//        //controlar si existe cuenta si no{
+//     while (cuentaExiste(cuenta) ){
+//         cuenta = checkingExistRandomNumber();
+//     }
+//        Account account = new Account(cuenta, LocalDate.now(),0.0);
+//        client.addAccountSet(account);
+//        accountRepository.save(account);
+//
+//        return new ResponseEntity<>("Account created successfully.", HttpStatus.CREATED);
+//    }
+

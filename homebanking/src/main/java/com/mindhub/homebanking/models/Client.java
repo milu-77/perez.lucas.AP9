@@ -8,6 +8,7 @@ import javax.persistence.*;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
  import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity
 public class Client {
@@ -125,16 +126,29 @@ public class Client {
         return accounts.size();
     }
 
-    public Long numCard(String cardType) {
+    public Long numCard(CardType cardType) {
+
         return cards.stream()
-                .filter(card -> card.getCardType().name().equals(cardType))
+                .filter(card -> card.getCardType().equals(cardType))
                .count();
     }
-    public boolean CanCard (String cardType) {
+    public boolean CanCardType (CardType cardType) {
         long cantCard = cards.stream()
-                .filter(card -> card.getCardType().name().equals(cardType))
+                .filter(card -> card.getCardType().equals(cardType))
                 .count();
-        return cantCard<3;
+        return cantCard < 3 ;
+    }
+
+    public boolean CanCardColor (CardType cardType, CardColor cardColor) {
+        Set<Card> cards = this.cards.stream()
+                .filter(newCard -> newCard.getCardType()== cardType).collect(Collectors.toSet());
+
+
+
+                       long cantColor = cards.stream()
+                .filter(card -> card.getCardColor().equals(cardColor))
+                .count();
+        return cantColor == 0;
     }
 
     public boolean hasCards() {
