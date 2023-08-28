@@ -136,7 +136,7 @@ public class Client {
     public boolean canCard (CardType cardType, CardColor cardColor) {
         Set<Card> cards = this.cards.stream()
                 .filter(newCard -> newCard.getCardType()== cardType).collect(Collectors.toSet());
-                       long cantColor = cards.stream()
+        long cantColor = cards.stream()
                 .filter(card -> card.getCardColor().equals(cardColor))
                 .count();
         return cantColor == 0 && cards.size()<3;

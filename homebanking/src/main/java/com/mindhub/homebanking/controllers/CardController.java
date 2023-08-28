@@ -33,10 +33,10 @@ public class CardController {
                         .collect(toList());
                 return new ResponseEntity<>(cards, HttpStatus.ACCEPTED);
             } else {
-                return new ResponseEntity<>("No tiene permiso de acceso a este recurso", HttpStatus.FORBIDDEN);
+                return new ResponseEntity<>("You don't have permission to access on this server", HttpStatus.FORBIDDEN);
             }
         } else {
-            return new ResponseEntity<>("No tiene permiso de acceso a este recurso", HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>("You don't have permission to access on this server", HttpStatus.FORBIDDEN);
         }
     }
 
@@ -47,7 +47,7 @@ public class CardController {
         if (client != null) {
             Card card = cardRepository.findById(code).orElse(null);
             if (card == null) {
-                return new ResponseEntity<>("Recurso No encontrado", HttpStatus.NOT_FOUND);
+                return new ResponseEntity<>("Resource not found", HttpStatus.NOT_FOUND);
             } else {
                 if (client.isAdmin()) {
                     CardDTO cardDTO = new CardDTO(card);
@@ -58,11 +58,11 @@ public class CardController {
                     return new ResponseEntity<>(cardDTO, HttpStatus.ACCEPTED);
                 }
                 else {
-                    return new ResponseEntity<>("No tiene permiso de acceso a este recurso", HttpStatus.UNAUTHORIZED);
+                    return new ResponseEntity<>("You don't have permission to access on this server", HttpStatus.UNAUTHORIZED);
                 }
             }
         }
-        return new ResponseEntity<>("No tiene permiso de acceso a este recurso", HttpStatus.UNAUTHORIZED);
+        return new ResponseEntity<>("You don't have permission to access on this server", HttpStatus.UNAUTHORIZED);
     }
 
     @GetMapping("clients/current/cards")
@@ -74,10 +74,10 @@ public class CardController {
             }
 
             else {
-                return new ResponseEntity<>("Cliente Sin tarjetas", HttpStatus.FORBIDDEN);
+                return new ResponseEntity<>("Customer without cards", HttpStatus.FORBIDDEN);
             }
         } else {
-            return new ResponseEntity<>("Cliente inexistente", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("User Account does not exists", HttpStatus.NOT_FOUND);
         }
     }
 
@@ -95,16 +95,13 @@ public class CardController {
                     Card card = new Card(cardType, cardColor, number);
                     client.addCard(card);
                     cardRepository.save(card);
-                    return new ResponseEntity<>("se pudo Crear ! Tarjetas: " +
-                            client.numCard(cardType) +
-                            " el cliente es " +
-                            client.getEmail(), HttpStatus.CREATED);
+                    return new ResponseEntity<>("Card created", HttpStatus.CREATED);
                 }
                 else {
-                    return new ResponseEntity<>("No se puede Crear ese tipo de tarjeta", HttpStatus.FORBIDDEN);
+                    return new ResponseEntity<>("Cannot create that type of card", HttpStatus.FORBIDDEN);
                 }
         } else {
-            return new ResponseEntity<>("Cliente inexistente", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("User account does not exists", HttpStatus.NOT_FOUND);
         }
     }
 

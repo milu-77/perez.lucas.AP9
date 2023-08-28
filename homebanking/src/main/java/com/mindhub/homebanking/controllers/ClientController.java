@@ -41,10 +41,10 @@ public class ClientController {
                         .collect(toList());
                 return new ResponseEntity<>(clients, HttpStatus.ACCEPTED);
             } else {
-                return new ResponseEntity<>("No tiene permiso de acceso a este recurso", HttpStatus.UNAUTHORIZED);
+                return new ResponseEntity<>("You don't have permission to access on this server", HttpStatus.UNAUTHORIZED);
             }
         }else{
-            return new ResponseEntity<>("No tiene permiso de acceso a este recurso", HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>("You don't have permission to access on this server", HttpStatus.UNAUTHORIZED);
         }
 
     }
@@ -58,7 +58,7 @@ public class ClientController {
     public ResponseEntity<Object> getClients(@PathVariable Long code, Authentication authentication) {//ClientDTO
         Client client = clientRepository.findById(code).orElse(null);
         if (client == null) {
-            return new ResponseEntity<>("Recurso No encontrado", HttpStatus.BAD_GATEWAY);
+            return new ResponseEntity<>("Resource not found", HttpStatus.NOT_FOUND);
         } else {
             if (client.getEmail().equals(authentication.getName())) {
                 ClientDTO ClientDTO = new ClientDTO(client);
@@ -68,7 +68,7 @@ public class ClientController {
                 ClientDTO ClientDTO = new ClientDTO(client);
                 return new ResponseEntity<>(ClientDTO, HttpStatus.ACCEPTED);
             } else {
-                return new ResponseEntity<>("No tiene permiso de acceso a este recurso", HttpStatus.UNAUTHORIZED);
+                return new ResponseEntity<>("You don't have permission to access on this server", HttpStatus.UNAUTHORIZED);
             }
         }
     }
@@ -100,7 +100,7 @@ public class ClientController {
         client.addAccounts(account);
         clientRepository.save(client);
         accountRepository.save(account);
-        return new ResponseEntity<>("Cuenta de usuario Creada", HttpStatus.CREATED);
+        return new ResponseEntity<>("User Account created", HttpStatus.CREATED);
     }
 
 }

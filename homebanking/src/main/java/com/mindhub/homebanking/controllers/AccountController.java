@@ -36,10 +36,10 @@ public class AccountController<t> {
                         .collect(toList());
                 return new ResponseEntity<>(accounts, HttpStatus.ACCEPTED);
             } else {
-                return new ResponseEntity<>("No tiene permiso de acceso a este recurso", HttpStatus.UNAUTHORIZED);
+                return new ResponseEntity<>("You don't have permission to access on this server", HttpStatus.UNAUTHORIZED);
             }
         } else {
-            return new ResponseEntity<>("No Se encuentra loggeado", HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>("You don't have permission to access on this server", HttpStatus.UNAUTHORIZED);
 
         }
 
@@ -49,7 +49,7 @@ public class AccountController<t> {
     public ResponseEntity<Object> getAccount(@PathVariable Long code, Authentication authentication) {
         Account account = accountRepository.findById(code).orElse(null);
          if (account == null) {
-            return new ResponseEntity<>("Recurso No encontrado", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("resource not found", HttpStatus.NOT_FOUND);
         } else {
             if (account.getHolder().getEmail().equals(authentication.getName())) {
                 AccountDTO accountDTO = new AccountDTO(account);
@@ -59,7 +59,7 @@ public class AccountController<t> {
                 AccountDTO accountDTO = new AccountDTO(account);
                 return new ResponseEntity<>(accountDTO, HttpStatus.ACCEPTED);
             } else {
-                return new ResponseEntity<>("No tiene permiso de acceso a este recurso", HttpStatus.UNAUTHORIZED);
+                return new ResponseEntity<>("You don't have permission to access on this server", HttpStatus.UNAUTHORIZED);
             }
         }
     }
@@ -70,7 +70,7 @@ public class AccountController<t> {
         if (client != null) {
             return new ResponseEntity<>(new ClientDTO(client).getAccounts(), HttpStatus.FORBIDDEN);
         } else {
-            return new ResponseEntity<>("Recurso no encontrado", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("resource not found", HttpStatus.NOT_FOUND);
         }
     }
 
@@ -86,15 +86,12 @@ public class AccountController<t> {
                 Account account = new Account(number, 0);
                 client.addAccounts(account);
                 accountRepository.save(account);
-                return new ResponseEntity<>("se pudo crear la cuenta, numero de cuentas: " +
-                        client.numAccounts() +
-                        " del cliente  " +
-                        client.getEmail(), HttpStatus.CREATED);
+                return new ResponseEntity<>("Account created", HttpStatus.CREATED);
             } else {
-                return new ResponseEntity<>("Cliente con tres cuentas, imposible agregar mas", HttpStatus.FORBIDDEN);
+                return new ResponseEntity<>("Account limit", HttpStatus.FORBIDDEN);
             }
         } else {
-            return new ResponseEntity<>("Cliente inexistente", HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>("User Account does not exists", HttpStatus.FORBIDDEN);
 
         }
     }

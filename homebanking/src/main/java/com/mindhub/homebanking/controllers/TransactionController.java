@@ -34,7 +34,7 @@ public class TransactionController {
                     .collect(toList());
             return new ResponseEntity<>(transactions, HttpStatus.ACCEPTED);
         } else {
-            return new ResponseEntity<>("No tiene permiso de acceso a este recurso", HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>("You don't have permission to access on this server", HttpStatus.UNAUTHORIZED);
         }
     }
 
@@ -42,12 +42,12 @@ public class TransactionController {
     public ResponseEntity<Object> getTransaction(@PathVariable Long code, Authentication authentication) {
         Transaction transaction = transactionRepository.findById(code).orElse(null);
         if (transaction == null) {
-            return new ResponseEntity<>("Recurso No encontrado", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("Resource not found", HttpStatus.NOT_FOUND);
         } else {
             if (transaction.getAccount().getMailHolder().equals(authentication.getName()) || authentication.getName().contains("admin@admin.com")) {
                 return new ResponseEntity<>(new TransactionDTO(transaction), HttpStatus.ACCEPTED);
             } else {
-                return new ResponseEntity<>("No tiene permiso de acceso a este recurso", HttpStatus.UNAUTHORIZED);
+                return new ResponseEntity<>("You don't have permission to access on this server", HttpStatus.UNAUTHORIZED);
             }
         }
     }
