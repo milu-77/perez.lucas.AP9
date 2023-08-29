@@ -30,6 +30,13 @@ public class Transaction {
         this.amount = amount;
     }
 
+    public Transaction(TransactionType transactionType, String description, float amount) {
+        this.type = transactionType;
+        this.date = LocalDateTime.now()  ;
+        this.description = description;
+        this.amount = amount;
+    }
+
     public void setAccount(Account account) {
         this.account = account;
     }

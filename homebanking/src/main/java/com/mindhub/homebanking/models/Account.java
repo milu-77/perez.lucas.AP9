@@ -82,6 +82,11 @@ public class Account {
     }
 
     public void addTransaction(Transaction transaction) {
+        if(transaction.getType().equals(TransactionType.CREDIT)){
+            setBalance(getBalance()+transaction.getAmount());
+        }else{
+            setBalance(getBalance()-transaction.getAmount());
+        }
         transaction.setAccount(this);
         this.transaction.add(transaction);
     }

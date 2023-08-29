@@ -38,16 +38,16 @@ public class HomebankingApplication {
             Client martita = new Client("Martita", "Salvo ", "martita@salvo.com", passwordEncoder.encode("123"),Rol.CLIENT);
             Client admin = new Client("admin ", "admin ", "admin@admin.com", passwordEncoder.encode("123"),Rol.ADMIN);
 
-            Account vin001 = new Account("VIN001", LocalDateTime.now(), 5000);
-            Account vin002 = new Account("VIN002", LocalDateTime.now().plusHours(24), 7500);
-            Account vin003 = new Account("VIN003", LocalDateTime.now().plusHours(48), 5000);
+            Account vin001 = new Account("VIN001", LocalDateTime.now().minusDays(10), 10000);
+            Account vin002 = new Account("VIN002", LocalDateTime.now().minusDays(50), 10000);
+            Account vin003 = new Account("VIN003", LocalDateTime.now().minusDays(48), 10000);
 
-            Transaction transaction1 = new Transaction(TransactionType.DEBIT, LocalDateTime.now(), "Compra", 1000);
-            Transaction transaction2 = new Transaction(TransactionType.CREDIT, LocalDateTime.now().plusHours(2), "Transferencia", 1000);
-            Transaction transaction3 = new Transaction(TransactionType.DEBIT, LocalDateTime.now().plusMonths(2), "Gasto Random", 5000);
-            Transaction transaction4 = new Transaction(TransactionType.CREDIT, LocalDateTime.now().plusHours(2), "Transferencia", 1400);
-            Transaction transaction5 = new Transaction(TransactionType.DEBIT, LocalDateTime.now().plusHours(1), "Compra de algo random", 1030);
-            Transaction transaction6 = new Transaction(TransactionType.CREDIT, LocalDateTime.now().plusHours(2), "Transferencia", 1000);
+            Transaction transaction1 = new Transaction(TransactionType.DEBIT, LocalDateTime.now().minusDays(2), "Compra", 1000);
+            Transaction transaction2 = new Transaction(TransactionType.CREDIT, LocalDateTime.now().minusDays(2), "Transferencia", 1000);
+            Transaction transaction3 = new Transaction(TransactionType.DEBIT, LocalDateTime.now().minusDays(2), "Gasto Random", 5000);
+            Transaction transaction4 = new Transaction(TransactionType.CREDIT, LocalDateTime.now().minusDays(2), "Transferencia", 1000);
+            Transaction transaction5 = new Transaction(TransactionType.DEBIT, LocalDateTime.now().minusDays(1), "Compra de algo random", 2000);
+            Transaction transaction6 = new Transaction(TransactionType.CREDIT, LocalDateTime.now().minusDays(5), "Transferencia", 1000);
 
             Loan hipotecario = new Loan("Hipotecario", 500000, new ArrayList<Integer>() {{
                 add(12);

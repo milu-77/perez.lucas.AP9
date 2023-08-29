@@ -68,7 +68,7 @@ public class AccountController<t> {
     public ResponseEntity<Object> getAccount(Authentication authentication) {
         Client client = clientRepository.findByEmail(authentication.getName());
         if (client != null) {
-            return new ResponseEntity<>(new ClientDTO(client).getAccounts(), HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>( new ClientDTO(client).getAccounts() , HttpStatus.ACCEPTED);
         } else {
             return new ResponseEntity<>("resource not found", HttpStatus.NOT_FOUND);
         }
