@@ -53,11 +53,10 @@ public class CardController {
                     CardDTO cardDTO = new CardDTO(card);
                     return new ResponseEntity<>(cardDTO, HttpStatus.ACCEPTED);
                 }
-                if (client.getEmail().equals(  card.getCardHolder().getEmail())) {
+                if (client.getEmail().equals(card.getCardHolder().getEmail())) {
                     CardDTO cardDTO = new CardDTO(card);
                     return new ResponseEntity<>(cardDTO, HttpStatus.ACCEPTED);
-                }
-                else {
+                } else {
                     return new ResponseEntity<>("You don't have permission to access on this server", HttpStatus.UNAUTHORIZED);
                 }
             }
@@ -71,9 +70,7 @@ public class CardController {
         if (client != null) {
             if (client.hasCards()) {
                 return new ResponseEntity<>(new ClientDTO(client).getCards(), HttpStatus.ACCEPTED);
-            }
-
-            else {
+            } else {
                 return new ResponseEntity<>("Customer without cards", HttpStatus.FORBIDDEN);
             }
         } else {
@@ -87,19 +84,18 @@ public class CardController {
                                              Authentication authentication) {
         Client client = clientRepository.findByEmail(authentication.getName());
         if (client != null) {
-                if(client.canCard(cardType,cardColor)){
-                    String number = Card.newNumberCard();
-                    while (cardRepository.findByNumber(number) != null){
-                        number = String.valueOf(Account.newNumberAccount());
-                    }
-                    Card card = new Card(cardType, cardColor, number);
-                    client.addCard(card);
-                    cardRepository.save(card);
-                    return new ResponseEntity<>("Card created", HttpStatus.CREATED);
+            if (client.canCard(cardType, cardColor)) {
+                String number = Card.newNumberCard();
+                while (cardRepository.findByNumber(number) != null) {
+                    number = String.valueOf(Account.newNumberAccount());
                 }
-                else {
-                    return new ResponseEntity<>("Cannot create that type of card", HttpStatus.FORBIDDEN);
-                }
+                Card card = new Card(cardType, cardColor, number);
+                client.addCard(card);
+                cardRepository.save(card);
+                return new ResponseEntity<>("Card created", HttpStatus.CREATED);
+            } else {
+                return new ResponseEntity<>("Cannot create that type of card", HttpStatus.FORBIDDEN);
+            }
         } else {
             return new ResponseEntity<>("User account does not exists", HttpStatus.NOT_FOUND);
         }

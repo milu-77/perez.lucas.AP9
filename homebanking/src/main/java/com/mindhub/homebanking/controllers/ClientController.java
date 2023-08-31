@@ -25,7 +25,6 @@ import static java.util.stream.Collectors.toList;
 public class ClientController {
     @Autowired
     private PasswordEncoder passwordEncoder;
-
     @Autowired
     private ClientRepository clientRepository;
     @Autowired
@@ -33,8 +32,8 @@ public class ClientController {
 
     @GetMapping("/clients")
     public ResponseEntity<Object> getClients(Authentication authentication) {
-        Client client =  clientRepository.findByEmail(authentication.getName());
-        if (client!=null){
+        Client client = clientRepository.findByEmail(authentication.getName());
+        if (client != null) {
             if (client.isAdmin()) {
                 List<ClientDTO> clients = clientRepository.findAll().stream()
                         .map(ClientDTO::new)
@@ -43,10 +42,9 @@ public class ClientController {
             } else {
                 return new ResponseEntity<>("You don't have permission to access on this server", HttpStatus.UNAUTHORIZED);
             }
-        }else{
+        } else {
             return new ResponseEntity<>("You don't have permission to access on this server", HttpStatus.UNAUTHORIZED);
         }
-
     }
 
     @GetMapping("/clients/current")

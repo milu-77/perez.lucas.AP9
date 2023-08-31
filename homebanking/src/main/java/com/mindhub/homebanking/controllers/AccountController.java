@@ -40,15 +40,13 @@ public class AccountController<t> {
             }
         } else {
             return new ResponseEntity<>("You don't have permission to access on this server", HttpStatus.UNAUTHORIZED);
-
         }
-
     }
 
     @GetMapping("/accounts/{code}")
     public ResponseEntity<Object> getAccount(@PathVariable Long code, Authentication authentication) {
         Account account = accountRepository.findById(code).orElse(null);
-         if (account == null) {
+        if (account == null) {
             return new ResponseEntity<>("resource not found", HttpStatus.NOT_FOUND);
         } else {
             if (account.getHolder().getEmail().equals(authentication.getName())) {
@@ -68,7 +66,7 @@ public class AccountController<t> {
     public ResponseEntity<Object> getAccount(Authentication authentication) {
         Client client = clientRepository.findByEmail(authentication.getName());
         if (client != null) {
-            return new ResponseEntity<>( new ClientDTO(client).getAccounts() , HttpStatus.ACCEPTED);
+            return new ResponseEntity<>(new ClientDTO(client).getAccounts(), HttpStatus.ACCEPTED);
         } else {
             return new ResponseEntity<>("resource not found", HttpStatus.NOT_FOUND);
         }
@@ -92,7 +90,6 @@ public class AccountController<t> {
             }
         } else {
             return new ResponseEntity<>("User Account does not exists", HttpStatus.FORBIDDEN);
-
         }
     }
 }

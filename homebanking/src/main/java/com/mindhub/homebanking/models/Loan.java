@@ -15,13 +15,11 @@ public class Loan {
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
     @GenericGenerator(name = "native", strategy = "native")
     private Long id;
-
     private String name;
     private float maxAmount;
     @ElementCollection
     @Column(name = "payments")
     private List<Integer> payments = new ArrayList<>();
-
     @OneToMany(mappedBy = "loan", fetch = FetchType.EAGER)
     Set<ClientLoan> clientLoans = new HashSet<>();
 
@@ -71,7 +69,6 @@ public class Loan {
         this.clientLoans.add(client);
         client.setLoan(this);
     }
-
 
 }
 

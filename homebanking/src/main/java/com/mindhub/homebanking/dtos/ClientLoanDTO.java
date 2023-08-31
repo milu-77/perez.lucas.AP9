@@ -11,19 +11,12 @@ public class ClientLoanDTO {
     private double amount;
     private int payments;
 
-
-
-
-
-
-
     public ClientLoanDTO(ClientLoan clientLoan) {
         this.id = clientLoan.getId();
         this.loanId = clientLoan.getLoan().getId();
         this.name = clientLoan.getLoan().getName();
         this.amount = clientLoan.getAmount();
         this.payments = clientLoan.getPayments();
-
 
     }
 
@@ -46,6 +39,5 @@ public class ClientLoanDTO {
     public int getPayments() {
         return payments;
     }
-
 
 }

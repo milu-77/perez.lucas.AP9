@@ -12,7 +12,6 @@ public class AccountDTO {
 
     private long id;
     private String number;
-
     private float balance;
     private LocalDateTime Date;
     public String mailHolder;

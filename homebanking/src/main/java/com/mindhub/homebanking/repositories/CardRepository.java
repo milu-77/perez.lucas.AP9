@@ -10,6 +10,5 @@ public interface CardRepository extends JpaRepository<Card, Long> {
 
     List<Card> findByCardHolder_EmailContains(String email);
 
-
     Card findByNumber(String number);
 }

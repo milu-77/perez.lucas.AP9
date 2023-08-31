@@ -27,7 +27,6 @@ public class TransactionController {
     @Autowired
     private TransactionRepository transactionRepository;
     @Autowired
-
     private ClientRepository clientRepository;
     @Autowired
     private AccountRepository accountRepository;
@@ -83,8 +82,8 @@ public class TransactionController {
         Client client = clientRepository.findByEmail(authentication.getName());
         if (client != null) {
             Account accountFrom = accountRepository.findByNumber(fromAccountNumber);
-            if (accountFrom != null ) {
-                if(accountFrom.getHolder().getEmail().equals(client.getEmail()) ){
+            if (accountFrom != null) {
+                if (accountFrom.getHolder().getEmail().equals(client.getEmail())) {
                     Account accountTO = accountRepository.findByNumber(toAccountNumber);
                     if (accountTO != null) {
                         if (accountFrom.getBalance() >= amount) {
@@ -102,7 +101,7 @@ public class TransactionController {
                     } else {
                         return new ResponseEntity<>("Account to... not found", HttpStatus.FORBIDDEN);
                     }
-                }else{
+                } else {
                     return new ResponseEntity<>("Not account owner", HttpStatus.FORBIDDEN);
                 }
 
@@ -112,8 +111,6 @@ public class TransactionController {
         } else {
             return new ResponseEntity<>("User Account does not exists ", HttpStatus.FORBIDDEN);
         }
-
-
-
     }
+
 }

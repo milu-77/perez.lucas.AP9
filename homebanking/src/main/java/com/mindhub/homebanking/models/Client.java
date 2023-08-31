@@ -7,7 +7,7 @@ import org.springframework.security.core.GrantedAuthority;
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
- import java.util.Set;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Entity
@@ -38,7 +38,8 @@ public class Client {
         this.password = encode;
         this.rol = Rol.CLIENT;
     }
-    public Client(String firstName, String lastName, String email, String encode,Rol rol) {
+
+    public Client(String firstName, String lastName, String email, String encode, Rol rol) {
         this.lastName = lastName;
         this.firstName = firstName;
         this.email = email;
@@ -55,10 +56,8 @@ public class Client {
         this.cards = cards;
     }
 
-
     public Client() {
     }
-
 
     public Long getId() {
         return id;
@@ -122,7 +121,8 @@ public class Client {
         this.cards.add(card1);
         card1.setClient(this);
     }
-    public int numAccounts (){
+
+    public int numAccounts() {
         return accounts.size();
     }
 
@@ -130,16 +130,16 @@ public class Client {
 
         return cards.stream()
                 .filter(card -> card.getCardType().equals(cardType))
-               .count();
+                .count();
     }
 
-    public boolean canCard (CardType cardType, CardColor cardColor) {
+    public boolean canCard(CardType cardType, CardColor cardColor) {
         Set<Card> cards = this.cards.stream()
-                .filter(newCard -> newCard.getCardType()== cardType).collect(Collectors.toSet());
+                .filter(newCard -> newCard.getCardType() == cardType).collect(Collectors.toSet());
         long cantColor = cards.stream()
                 .filter(card -> card.getCardColor().equals(cardColor))
                 .count();
-        return cantColor == 0 && cards.size()<3;
+        return cantColor == 0 && cards.size() < 3;
     }
 
     public boolean hasCards() {
@@ -147,6 +147,6 @@ public class Client {
     }
 
     public boolean isAdmin() {
-        return this.rol.ordinal()==0;
+        return this.rol.ordinal() == 0;
     }
 }

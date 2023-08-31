@@ -8,7 +8,6 @@ import java.util.List;
 
 public class LoanDTO {
     private Long id;
-
     private String name;
     private float maxAmount;
 

@@ -1,6 +1,6 @@
 package com.mindhub.homebanking.models;
 
- import com.mindhub.homebanking.dtos.AccountDTO;
+import com.mindhub.homebanking.dtos.AccountDTO;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -32,7 +32,7 @@ public class Transaction {
 
     public Transaction(TransactionType transactionType, String description, float amount) {
         this.type = transactionType;
-        this.date = LocalDateTime.now()  ;
+        this.date = LocalDateTime.now();
         this.description = description;
         this.amount = amount;
     }

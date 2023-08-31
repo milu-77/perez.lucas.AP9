@@ -83,8 +83,6 @@ public class Card {
     }
 
 
-
-
     public Client getCardHolder() {
         return cardHolder;
     }
@@ -162,9 +160,6 @@ public class Card {
     private static LocalDateTime generateTruDate(LocalDateTime fromDate, int years) {
         return fromDate.plusYears(years);
     }
-
-
-
 
     public static String newNumberCard() {
         Random random = new Random();
