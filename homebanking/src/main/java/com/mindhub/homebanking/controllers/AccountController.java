@@ -6,6 +6,8 @@ import com.mindhub.homebanking.models.Account;
 import com.mindhub.homebanking.models.Client;
 import com.mindhub.homebanking.repositories.AccountRepository;
 import com.mindhub.homebanking.repositories.ClientRepository;
+import com.mindhub.homebanking.service.AccountService;
+import com.mindhub.homebanking.service.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,19 +23,19 @@ import static java.util.stream.Collectors.toList;
 @RequestMapping("/api/")
 public class AccountController<t> {
 
+
     @Autowired
-    private AccountRepository accountRepository;
+    private ClientService clientService;
     @Autowired
-    private ClientRepository clientRepository;
+    private AccountService accountService;
+
 
     @GetMapping("/accounts")
     public ResponseEntity<Object> getAccounts(Authentication authentication) {
-        Client client = clientRepository.findByEmail(authentication.getName());
+        Client client = clientService.findByEmail(authentication.getName());
         if (client != null) {
             if (client.isAdmin()) {
-                List<AccountDTO> accounts = accountRepository.findAll().stream()
-                        .map(AccountDTO::new)
-                        .collect(toList());
+                List<AccountDTO> accounts = accountService.findAll();
                 return new ResponseEntity<>(accounts, HttpStatus.ACCEPTED);
             } else {
                 return new ResponseEntity<>("You don't have permission to access on this server", HttpStatus.UNAUTHORIZED);
@@ -45,7 +47,7 @@ public class AccountController<t> {
 
     @GetMapping("/accounts/{code}")
     public ResponseEntity<Object> getAccount(@PathVariable Long code, Authentication authentication) {
-        Account account = accountRepository.findById(code).orElse(null);
+        Account account = accountService.findById(code);
         if (account == null) {
             return new ResponseEntity<>("resource not found", HttpStatus.NOT_FOUND);
         } else {
@@ -64,7 +66,7 @@ public class AccountController<t> {
 
     @GetMapping("/clients/current/accounts")
     public ResponseEntity<Object> getAccount(Authentication authentication) {
-        Client client = clientRepository.findByEmail(authentication.getName());
+        Client client = clientService.findByEmail(authentication.getName());
         if (client != null) {
             return new ResponseEntity<>(new ClientDTO(client).getAccounts(), HttpStatus.ACCEPTED);
         } else {
@@ -74,16 +76,16 @@ public class AccountController<t> {
 
     @RequestMapping(path = "/clients/current/accounts", method = RequestMethod.POST)
     public ResponseEntity<String> createAccount(Authentication authentication) {
-        Client client = clientRepository.findByEmail(authentication.getName());
+        Client client = clientService.findByEmail(authentication.getName());
         if (client != null) {
             if (client.numAccounts() < 3) {
                 String number = Account.newNumberAccount();
-                while (accountRepository.findByNumber(number) != null) {
+                while (accountService.findByNumber(number) != null) {
                     number = String.valueOf(Account.newNumberAccount());
                 }
                 Account account = new Account(number, 0);
                 client.addAccounts(account);
-                accountRepository.save(account);
+                accountService.save(account);
                 return new ResponseEntity<>("Account created", HttpStatus.CREATED);
             } else {
                 return new ResponseEntity<>("Account limit", HttpStatus.FORBIDDEN);

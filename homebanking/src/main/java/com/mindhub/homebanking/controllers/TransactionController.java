@@ -64,6 +64,8 @@ public class TransactionController {
                                                      @RequestParam float amount,
                                                      @RequestParam String description,
                                                      Authentication authentication) {
+
+
         if (fromAccountNumber.isEmpty()) {
             return new ResponseEntity<>("Missing data", HttpStatus.FORBIDDEN);
         }
@@ -71,13 +73,13 @@ public class TransactionController {
             return new ResponseEntity<>("Missing data", HttpStatus.FORBIDDEN);
         }
         if (amount <= 0) {
-            return new ResponseEntity<>("Missing data", HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>("Error Amount", HttpStatus.FORBIDDEN);
         }
         if (description.isEmpty()) {
             return new ResponseEntity<>("Missing data", HttpStatus.FORBIDDEN);
         }
         if (fromAccountNumber.equals(toAccountNumber)) {
-            return new ResponseEntity<>("Missing data", HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>("Same account", HttpStatus.FORBIDDEN);
         }
         Client client = clientRepository.findByEmail(authentication.getName());
         if (client != null) {
@@ -104,7 +106,6 @@ public class TransactionController {
                 } else {
                     return new ResponseEntity<>("Not account owner", HttpStatus.FORBIDDEN);
                 }
-
             } else {
                 return new ResponseEntity<>("Account from... not found", HttpStatus.FORBIDDEN);
             }

@@ -1,6 +1,7 @@
 package com.mindhub.homebanking.models;
 
 
+import com.mindhub.homebanking.dtos.LoanApplicationDTO;
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.security.core.GrantedAuthority;
 
@@ -142,11 +143,21 @@ public class Client {
         return cantColor == 0 && cards.size() < 3;
     }
 
+    public Rol getRol() {
+        return rol;
+    }
+
     public boolean hasCards() {
         return !this.cards.isEmpty();
     }
 
     public boolean isAdmin() {
         return this.rol.ordinal() == 0;
+    }
+
+    public void acreditar(LoanApplicationDTO loan) {
+
+
+
     }
 }

@@ -1,12 +1,10 @@
 package com.mindhub.homebanking.controllers;
 
-import com.mindhub.homebanking.dtos.AccountDTO;
-import com.mindhub.homebanking.dtos.ClientDTO;
+ import com.mindhub.homebanking.dtos.ClientDTO;
 import com.mindhub.homebanking.models.Account;
-import com.mindhub.homebanking.models.Card;
-import com.mindhub.homebanking.models.Client;
-import com.mindhub.homebanking.repositories.AccountRepository;
-import com.mindhub.homebanking.repositories.ClientRepository;
+ import com.mindhub.homebanking.models.Client;
+ import com.mindhub.homebanking.service.AccountService;
+ import com.mindhub.homebanking.service.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,9 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
-import static java.util.stream.Collectors.toList;
 
 
 @RestController()
@@ -26,18 +22,20 @@ public class ClientController {
     @Autowired
     private PasswordEncoder passwordEncoder;
     @Autowired
-    private ClientRepository clientRepository;
+    private ClientService clientService;
+
     @Autowired
-    private AccountRepository accountRepository;
+    private AccountService accountService;
+
 
     @GetMapping("/clients")
     public ResponseEntity<Object> getClients(Authentication authentication) {
-        Client client = clientRepository.findByEmail(authentication.getName());
+        Client client = clientService.findByEmail(authentication.getName());
         if (client != null) {
             if (client.isAdmin()) {
-                List<ClientDTO> clients = clientRepository.findAll().stream()
-                        .map(ClientDTO::new)
-                        .collect(toList());
+                List<ClientDTO> clients = clientService.getClientDTO();
+
+
                 return new ResponseEntity<>(clients, HttpStatus.ACCEPTED);
             } else {
                 return new ResponseEntity<>("You don't have permission to access on this server", HttpStatus.UNAUTHORIZED);
@@ -49,12 +47,12 @@ public class ClientController {
 
     @GetMapping("/clients/current")
     public ClientDTO getClient(Authentication authentication) {
-        return new ClientDTO(clientRepository.findByEmail(authentication.getName()));
+        return  new ClientDTO(clientService.findByEmail(authentication.getName()) ) ;
     }
 
     @GetMapping("/clients/{code}")
     public ResponseEntity<Object> getClients(@PathVariable Long code, Authentication authentication) {//ClientDTO
-        Client client = clientRepository.findById(code).orElse(null);
+        Client client = clientService.findById(code);
         if (client == null) {
             return new ResponseEntity<>("Resource not found", HttpStatus.NOT_FOUND);
         } else {
@@ -88,16 +86,16 @@ public class ClientController {
         if (password.isEmpty()) {
             return new ResponseEntity<>("Missing data", HttpStatus.FORBIDDEN);
         }
-        if (clientRepository.findByEmail(email) != null) {
+        if (clientService.findByEmail(email) != null) {
             return new ResponseEntity<>("Name already in use", HttpStatus.FORBIDDEN);
         }
         Client client = new Client(firstName, lastName, email, passwordEncoder.encode(password));
         String number = Account.newNumberAccount();
-        while (accountRepository.findByNumber(number) != null) number = String.valueOf(Account.newNumberAccount());
+        while (accountService.findByNumber(number) != null) number = String.valueOf(Account.newNumberAccount());
         Account account = new Account(number, 0);
         client.addAccounts(account);
-        clientRepository.save(client);
-        accountRepository.save(account);
+        clientService.save(client);
+        accountService.save(account);
         return new ResponseEntity<>("User Account created", HttpStatus.CREATED);
     }
 

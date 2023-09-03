@@ -101,4 +101,8 @@ public class Account {
         number.append(random.nextInt(1000000));
         return String.valueOf(number);
     }
+
+    public void addLoan(ClientLoan loanTaken) {
+        this.balance= (float) (this.balance+loanTaken.getAmount());
+    }
 }
