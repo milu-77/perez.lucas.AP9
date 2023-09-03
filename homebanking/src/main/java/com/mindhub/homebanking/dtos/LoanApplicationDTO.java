@@ -8,12 +8,6 @@ public class LoanApplicationDTO {
     int payments;
     String toAccountNumber;
 
-    public LoanApplicationDTO(Long loanId, double amount, int payments, String toAccountNumber) {
-        this.loanId = loanId;
-        this.amount = amount;
-        this.payments = payments;
-        this.toAccountNumber = toAccountNumber;
-    }
 
     public LoanApplicationDTO() {
     }

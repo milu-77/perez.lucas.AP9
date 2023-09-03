@@ -1,5 +1,6 @@
 package com.mindhub.homebanking.models;
 
+import com.mindhub.homebanking.dtos.LoanApplicationDTO;
 import net.minidev.json.annotate.JsonIgnore;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -70,5 +71,11 @@ public class Loan {
         client.setLoan(this);
     }
 
+    public boolean isValid(LoanApplicationDTO loan) {
+        if(loan.getAmount()>this.maxAmount){
+            return false;
+        }
+        return this.payments.contains(loan.getPayments());
+    }
 }
 

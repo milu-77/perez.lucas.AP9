@@ -104,5 +104,10 @@ public class Account {
 
     public void addLoan(ClientLoan loanTaken) {
         this.balance= (float) (this.balance+loanTaken.getAmount());
+     }
+
+    public boolean isValidClient(String email) {
+
+        return this.holder.getEmail().equals(email);
     }
 }

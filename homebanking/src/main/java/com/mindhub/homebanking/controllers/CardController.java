@@ -3,8 +3,6 @@ package com.mindhub.homebanking.controllers;
 import com.mindhub.homebanking.dtos.CardDTO;
 import com.mindhub.homebanking.dtos.ClientDTO;
 import com.mindhub.homebanking.models.*;
-import com.mindhub.homebanking.repositories.CardRepository;
-import com.mindhub.homebanking.repositories.ClientRepository;
 import com.mindhub.homebanking.service.CardService;
 import com.mindhub.homebanking.service.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,8 +12,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
-import static java.util.stream.Collectors.toList;
 
 @RestController()
 @RequestMapping("/api/")

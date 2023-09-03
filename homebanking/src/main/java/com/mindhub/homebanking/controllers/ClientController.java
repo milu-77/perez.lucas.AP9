@@ -1,10 +1,10 @@
 package com.mindhub.homebanking.controllers;
 
- import com.mindhub.homebanking.dtos.ClientDTO;
+import com.mindhub.homebanking.dtos.ClientDTO;
 import com.mindhub.homebanking.models.Account;
- import com.mindhub.homebanking.models.Client;
- import com.mindhub.homebanking.service.AccountService;
- import com.mindhub.homebanking.service.ClientService;
+import com.mindhub.homebanking.models.Client;
+import com.mindhub.homebanking.service.AccountService;
+import com.mindhub.homebanking.service.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,7 +13,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
 
 
 @RestController()
@@ -34,8 +33,6 @@ public class ClientController {
         if (client != null) {
             if (client.isAdmin()) {
                 List<ClientDTO> clients = clientService.getClientDTO();
-
-
                 return new ResponseEntity<>(clients, HttpStatus.ACCEPTED);
             } else {
                 return new ResponseEntity<>("You don't have permission to access on this server", HttpStatus.UNAUTHORIZED);
@@ -47,7 +44,7 @@ public class ClientController {
 
     @GetMapping("/clients/current")
     public ClientDTO getClient(Authentication authentication) {
-        return  new ClientDTO(clientService.findByEmail(authentication.getName()) ) ;
+        return new ClientDTO(clientService.findByEmail(authentication.getName()));
     }
 
     @GetMapping("/clients/{code}")

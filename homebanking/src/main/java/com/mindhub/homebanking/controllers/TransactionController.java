@@ -1,14 +1,13 @@
 package com.mindhub.homebanking.controllers;
 
-
 import com.mindhub.homebanking.dtos.TransactionDTO;
 import com.mindhub.homebanking.models.Account;
 import com.mindhub.homebanking.models.Client;
 import com.mindhub.homebanking.models.Transaction;
 import com.mindhub.homebanking.models.TransactionType;
-import com.mindhub.homebanking.repositories.AccountRepository;
-import com.mindhub.homebanking.repositories.ClientRepository;
-import com.mindhub.homebanking.repositories.TransactionRepository;
+import com.mindhub.homebanking.service.AccountService;
+import com.mindhub.homebanking.service.ClientService;
+import com.mindhub.homebanking.service.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,24 +18,20 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static java.util.stream.Collectors.toList;
-
 @RestController()
 @RequestMapping("/api")
 public class TransactionController {
     @Autowired
-    private TransactionRepository transactionRepository;
+    private TransactionService transactionService;
     @Autowired
-    private ClientRepository clientRepository;
+    private ClientService clientService;
     @Autowired
-    private AccountRepository accountRepository;
+    private AccountService accountService;
 
     @GetMapping("/transactions")
     public ResponseEntity<Object> getTransactions(Authentication authentication) {
         if (authentication.getName().contains("admin@admin.com")) {
-            List<TransactionDTO> transactions = transactionRepository.findAll().stream()
-                    .map(TransactionDTO::new)
-                    .collect(toList());
+            List<TransactionDTO> transactions = transactionService.findAll();
             return new ResponseEntity<>(transactions, HttpStatus.ACCEPTED);
         } else {
             return new ResponseEntity<>("You don't have permission to access on this server", HttpStatus.UNAUTHORIZED);
@@ -45,7 +40,7 @@ public class TransactionController {
 
     @GetMapping("/transactions/{code}")
     public ResponseEntity<Object> getTransaction(@PathVariable Long code, Authentication authentication) {
-        Transaction transaction = transactionRepository.findById(code).orElse(null);
+        Transaction transaction = transactionService.findById(code);
         if (transaction == null) {
             return new ResponseEntity<>("Resource not found", HttpStatus.NOT_FOUND);
         } else {
@@ -64,8 +59,6 @@ public class TransactionController {
                                                      @RequestParam float amount,
                                                      @RequestParam String description,
                                                      Authentication authentication) {
-
-
         if (fromAccountNumber.isEmpty()) {
             return new ResponseEntity<>("Missing data", HttpStatus.FORBIDDEN);
         }
@@ -81,12 +74,12 @@ public class TransactionController {
         if (fromAccountNumber.equals(toAccountNumber)) {
             return new ResponseEntity<>("Same account", HttpStatus.FORBIDDEN);
         }
-        Client client = clientRepository.findByEmail(authentication.getName());
+        Client client = clientService.findByEmail(authentication.getName());
         if (client != null) {
-            Account accountFrom = accountRepository.findByNumber(fromAccountNumber);
+            Account accountFrom = accountService.findByNumber(fromAccountNumber);
             if (accountFrom != null) {
                 if (accountFrom.getHolder().getEmail().equals(client.getEmail())) {
-                    Account accountTO = accountRepository.findByNumber(toAccountNumber);
+                    Account accountTO = accountService.findByNumber(toAccountNumber);
                     if (accountTO != null) {
                         if (accountFrom.getBalance() >= amount) {
                             Transaction transactionCredit = new Transaction(TransactionType.CREDIT, description, amount);
@@ -94,8 +87,8 @@ public class TransactionController {
                             accountFrom.addTransaction(transactionDebit);
                             //int a = 2 / 0;
                             accountTO.addTransaction(transactionCredit);
-                            transactionRepository.save(transactionCredit);
-                            transactionRepository.save(transactionDebit);
+                            transactionService.save(transactionCredit);
+                            transactionService.save(transactionDebit);
                             return new ResponseEntity<>("successful transaction", HttpStatus.ACCEPTED);
                         } else {
                             return new ResponseEntity<>("No credit", HttpStatus.FORBIDDEN);

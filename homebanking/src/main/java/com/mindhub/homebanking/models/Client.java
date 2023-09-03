@@ -156,8 +156,14 @@ public class Client {
     }
 
     public void acreditar(LoanApplicationDTO loan) {
-
-
-
     }
+
+    public boolean isValidLoan(Loan loanType) {
+        System.out.println(this.getClientLoans()
+                .stream().noneMatch(clientLoan -> clientLoan.getLoan().getName().equals(loanType.getName()))  );
+        return this.getClientLoans()
+                .stream().noneMatch(clientLoan -> clientLoan.getLoan().getName().equals(loanType.getName()));
+    }
+
+
 }
