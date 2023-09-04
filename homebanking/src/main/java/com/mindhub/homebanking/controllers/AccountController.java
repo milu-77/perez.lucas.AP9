@@ -44,7 +44,7 @@ public class AccountController<t> {
         if (account == null) {
             return new ResponseEntity<>("resource not found", HttpStatus.NOT_FOUND);
         } else {
-            if (account.getHolder().getEmail().equals(authentication.getName())) {
+            if ( account.isValidClient(authentication.getName())) {
                 AccountDTO accountDTO = new AccountDTO(account);
                 return new ResponseEntity<>(accountDTO, HttpStatus.ACCEPTED);
             }
@@ -71,7 +71,7 @@ public class AccountController<t> {
     public ResponseEntity<String> createAccount(Authentication authentication) {
         Client client = clientService.findByEmail(authentication.getName());
         if (client != null) {
-            if (client.numAccounts() < 3) {
+            if (client.canAccounts()) {
                 String number = Account.newNumberAccount();
                 while (accountService.findByNumber(number) != null) {
                     number = String.valueOf(Account.newNumberAccount());
@@ -79,7 +79,7 @@ public class AccountController<t> {
                 Account account = new Account(number, 0);
                 client.addAccounts(account);
                 accountService.save(account);
-                return new ResponseEntity<>("Account created", HttpStatus.CREATED);
+                return new ResponseEntity<>("Account created, num accounts: "+client.numAccounts(), HttpStatus.CREATED);
             } else {
                 return new ResponseEntity<>("Account limit", HttpStatus.FORBIDDEN);
             }

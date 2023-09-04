@@ -80,4 +80,8 @@ public class Transaction {
     public float getAmount() {
         return amount;
     }
+
+    public boolean isHolder(Client client) {
+        return this.getAccount().getMailHolder().equals(client.getEmail());
+    }
 }

@@ -173,6 +173,11 @@ public class Card {
 
         return number;
     }
+
+    public boolean isHolder(Client client) {
+        return  this.getCardHolder().getEmail().equals(client.getEmail());
+
+    }
 }
 
 

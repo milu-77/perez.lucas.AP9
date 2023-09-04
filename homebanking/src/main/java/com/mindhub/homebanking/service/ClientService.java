@@ -10,6 +10,8 @@ public interface ClientService {
 
     Client findByEmail(String name);
 
+    ClientDTO findDTOByEmail(String email);
+
     List<ClientDTO> getClientDTO();
 
     Client findById(Long code);

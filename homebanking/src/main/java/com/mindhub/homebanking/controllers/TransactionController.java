@@ -30,26 +30,47 @@ public class TransactionController {
 
     @GetMapping("/transactions")
     public ResponseEntity<Object> getTransactions(Authentication authentication) {
-        if (authentication.getName().contains("admin@admin.com")) {
-            List<TransactionDTO> transactions = transactionService.findAll();
-            return new ResponseEntity<>(transactions, HttpStatus.ACCEPTED);
-        } else {
+        Client client = clientService.findByEmail(authentication.getName());
+        if(client != null){
+            if (client.isAdmin()) {
+                List<TransactionDTO> transactions = transactionService.findAll();
+                return new ResponseEntity<>(transactions, HttpStatus.ACCEPTED);
+            } else {
+                return new ResponseEntity<>("You don't have permission to access on this server", HttpStatus.UNAUTHORIZED);
+            }
+        }
+         else {
             return new ResponseEntity<>("You don't have permission to access on this server", HttpStatus.UNAUTHORIZED);
         }
     }
 
     @GetMapping("/transactions/{code}")
     public ResponseEntity<Object> getTransaction(@PathVariable Long code, Authentication authentication) {
-        Transaction transaction = transactionService.findById(code);
-        if (transaction == null) {
-            return new ResponseEntity<>("Resource not found", HttpStatus.NOT_FOUND);
-        } else {
-            if (transaction.getAccount().getMailHolder().equals(authentication.getName()) || authentication.getName().contains("admin@admin.com")) {
-                return new ResponseEntity<>(new TransactionDTO(transaction), HttpStatus.ACCEPTED);
+        Client client = clientService.findByEmail(authentication.getName());
+        if(client != null){
+             Transaction transaction = transactionService.findById(code);
+            if (transaction == null) {
+                return new ResponseEntity<>("Resource not found", HttpStatus.NOT_FOUND);
             } else {
-                return new ResponseEntity<>("You don't have permission to access on this server", HttpStatus.UNAUTHORIZED);
+
+                if (transaction.isHolder(client ) ||  client.isAdmin()) {
+                    return new ResponseEntity<>(new TransactionDTO(transaction), HttpStatus.ACCEPTED);
+                } else {
+                    return new ResponseEntity<>("You don't have permission to access on this server", HttpStatus.UNAUTHORIZED);
+                }
             }
+        } else {
+            return new ResponseEntity<>("You don't have permission to access on this server", HttpStatus.UNAUTHORIZED);
         }
+
+
+
+
+
+
+
+
+
     }
 
     @Transactional

@@ -49,7 +49,7 @@ public class CardController {
                     CardDTO cardDTO = new CardDTO(card);
                     return new ResponseEntity<>(cardDTO, HttpStatus.ACCEPTED);
                 }
-                if (client.getEmail().equals(card.getCardHolder().getEmail())) {
+                if (  card.isHolder(client)) {
                     CardDTO cardDTO = new CardDTO(card);
                     return new ResponseEntity<>(cardDTO, HttpStatus.ACCEPTED);
                 } else {

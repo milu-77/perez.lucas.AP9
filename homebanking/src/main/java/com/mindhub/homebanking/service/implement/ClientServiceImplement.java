@@ -22,6 +22,10 @@ public class ClientServiceImplement implements ClientService {
     public Client findByEmail(String email) {
         return clientRepository.findByEmail(email);
     }
+    @Override
+    public ClientDTO findDTOByEmail(String email) {
+        return new ClientDTO(clientRepository.findByEmail(email));
+    }
 
     @Override
     public List<ClientDTO> getClientDTO() {

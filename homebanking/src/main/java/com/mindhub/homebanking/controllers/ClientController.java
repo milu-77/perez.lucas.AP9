@@ -44,7 +44,7 @@ public class ClientController {
 
     @GetMapping("/clients/current")
     public ClientDTO getClient(Authentication authentication) {
-        return new ClientDTO(clientService.findByEmail(authentication.getName()));
+        return clientService.findDTOByEmail(authentication.getName());
     }
 
     @GetMapping("/clients/{code}")
@@ -53,13 +53,11 @@ public class ClientController {
         if (client == null) {
             return new ResponseEntity<>("Resource not found", HttpStatus.NOT_FOUND);
         } else {
-            if (client.getEmail().equals(authentication.getName())) {
-                ClientDTO ClientDTO = new ClientDTO(client);
-                return new ResponseEntity<>(ClientDTO, HttpStatus.ACCEPTED);
+            if (client.isValidAuthentication(authentication.getName() ) ) {
+                return new ResponseEntity<>(new ClientDTO(client), HttpStatus.ACCEPTED);
             }
             if (client.isAdmin()) {
-                ClientDTO ClientDTO = new ClientDTO(client);
-                return new ResponseEntity<>(ClientDTO, HttpStatus.ACCEPTED);
+                return new ResponseEntity<>(new ClientDTO(client), HttpStatus.ACCEPTED);
             } else {
                 return new ResponseEntity<>("You don't have permission to access on this server", HttpStatus.UNAUTHORIZED);
             }

@@ -67,4 +67,9 @@ public class ClientDTO {
     public boolean isAdmin() {
         return this.rol.ordinal() == 0;
     }
+
+
+//      public static ClientDTO newDTO (Client client){
+//        return new ClientDTO(client);
+//    }
 }

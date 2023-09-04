@@ -8,6 +8,7 @@ import org.springframework.security.core.GrantedAuthority;
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -155,14 +156,56 @@ public class Client {
         return this.rol.ordinal() == 0;
     }
 
-    public void acreditar(LoanApplicationDTO loan) {
+
+
+    public boolean isValidLoan(Loan loanType, int condition) {
+        //int condition =0;
+        switch (condition) {
+            case 0: // No mas de un tipo de credito
+                return existLoanType(loanType);
+            case 1:// Limite de dinero
+                return this.debtType(loanType) < loanType.getMaxAmount();
+            case 2: //cantidad de tipos de creditos: limite 2
+                 return this.cantDebType(loanType)<2;
+            case 3: //cantidad de tipos de creditos: limite 2 y no mas del maximo
+                return this.cantDebType(loanType)<2 &&  this.debtType(loanType)<loanType.getMaxAmount();
+            default:
+                System.out.println("Opción no válida");
+        }
+        return false;
     }
 
-    public boolean isValidLoan(Loan loanType) {
-        System.out.println(this.getClientLoans()
-                .stream().noneMatch(clientLoan -> clientLoan.getLoan().getName().equals(loanType.getName()))  );
+
+    public boolean canAccounts() {
+        return numAccounts()<3;
+    }
+
+    public boolean isValidAuthentication(String email) {
+        return this.getEmail().equals(email);
+    }
+    public double debtType(Loan loanType){
+        List<ClientLoan> loan = this.getClientLoans()
+                .stream()
+                .filter(clientLoan -> clientLoan.getLoan().getName().equals(loanType.getName()))
+                .collect(Collectors.toList());
+        double total=0;
+        for (ClientLoan elemento : loan) {
+            total=total+elemento.getAmount();
+        }
+        return total;
+    }
+
+    public Long cantDebType(Loan loanType){
+        Long  cant = this.getClientLoans()
+                .stream()
+                .filter(clientLoan -> clientLoan.getLoan().getName().equals(loanType.getName()))
+                .count();
+        return cant;
+    }
+    public boolean existLoanType (Loan loanType){
         return this.getClientLoans()
-                .stream().noneMatch(clientLoan -> clientLoan.getLoan().getName().equals(loanType.getName()));
+                .stream()
+                .noneMatch(clientLoan -> clientLoan.getLoan().getName().equals(loanType.getName()));
     }
 
 
