@@ -49,19 +49,19 @@ public class HomebankingApplication {
             Transaction transaction5 = new Transaction(TransactionType.DEBIT, LocalDateTime.now().minusDays(1), "Compra de algo random", 2000);
             Transaction transaction6 = new Transaction(TransactionType.CREDIT, LocalDateTime.now().minusDays(5), "Transferencia", 1000);
 
-            Loan hipotecario = new Loan("Hipotecario", 500000, new ArrayList<Integer>() {{
+            Loan hipotecario = new Loan("mortgage", 500000, new ArrayList<Integer>() {{
                 add(12);
                 add(24);
                 add(36);
                 add(48);
                 add(60);
             }});
-            Loan personal = new Loan("Personal", 500000, new ArrayList<Integer>() {{
+            Loan personal = new Loan("Personal Loan", 500000, new ArrayList<Integer>() {{
                 add(6);
                 add(12);
                 add(24);
             }});
-            Loan automotriz = new Loan("Automotriz", 500000, new ArrayList<Integer>() {{
+            Loan automotriz = new Loan("Auto loan", 500000, new ArrayList<Integer>() {{
                 add(6);
                 add(12);
                 add(24);
