@@ -82,10 +82,10 @@ public class Account {
     }
 
     public void addTransaction(Transaction transaction) {
-        if(transaction.getType().equals(TransactionType.CREDIT)){
-            setBalance(getBalance()+transaction.getAmount());
-        }else{
-            setBalance(getBalance()-transaction.getAmount());
+        if (transaction.getType().equals(TransactionType.CREDIT)) {
+            setBalance(getBalance() + transaction.getAmount());
+        } else {
+            setBalance(getBalance() - transaction.getAmount());
         }
         transaction.setAccount(this);
         this.transaction.add(transaction);
@@ -103,8 +103,8 @@ public class Account {
     }
 
     public void addLoan(ClientLoan loanTaken) {
-        this.balance= (float) (this.balance+loanTaken.getAmount());
-     }
+        this.balance = (float) (this.balance + loanTaken.getAmount());
+    }
 
     public boolean isValidClient(String email) {
 

@@ -108,6 +108,8 @@ public class TransactionController {
                             accountFrom.addTransaction(transactionDebit);
                             //int a = 2 / 0;
                             accountTO.addTransaction(transactionCredit);
+                            accountService.save(accountFrom);
+                            accountService.save(accountTO);
                             transactionService.save(transactionCredit);
                             transactionService.save(transactionDebit);
                             return new ResponseEntity<>("successful transaction", HttpStatus.ACCEPTED);

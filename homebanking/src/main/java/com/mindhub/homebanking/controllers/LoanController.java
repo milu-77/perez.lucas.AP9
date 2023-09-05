@@ -80,6 +80,8 @@ public class LoanController {
                                 loanTaken.addClient(client);
                                 clientLoanService.save(loanTaken);
                                 transactionService.save(transaction);
+                                clientService.save(client);
+                                accountService.save(account);
                                 return new ResponseEntity<>("Loan create Total debt:" + client.debtType(loanType), HttpStatus.CREATED);
                             } else {
                                 return new ResponseEntity<>("Invalid Client", HttpStatus.FORBIDDEN);
