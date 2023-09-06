@@ -13,19 +13,17 @@ public class AccountDTO {
     private long id;
     private String number;
     private float balance;
-    private LocalDateTime Date;
+    private LocalDateTime creationDate;
     public String mailHolder;
     Set<TransactionDTO> transactions = new HashSet<>();
 
     public AccountDTO(Account account) {
         this.id = account.getId();
         this.number = account.getNumber();
-        this.Date = account.getDate();
+        this.creationDate = account.getDate();
         this.balance = account.getBalance();
-        this.transactions = account.getTransaction().stream()
-                .map(TransactionDTO::new)
-                .collect(Collectors.toSet());
-        mailHolder=account.getHolder().getEmail();
+        this.transactions = account.getTransaction().stream().map(TransactionDTO::new).collect(Collectors.toSet());
+        mailHolder = account.getHolder().getEmail();
     }
 
     public long getId() {
@@ -41,12 +39,18 @@ public class AccountDTO {
     }
 
     public LocalDateTime getDate() {
-        return Date;
+        return creationDate;
     }
 
-    public String getMailHolder() {return mailHolder;
+    public String getMailHolder() {
+        return mailHolder;
     }
+
     public Set<TransactionDTO> getTransactions() {
         return transactions;
+    }
+
+    public LocalDateTime getCreationDate() {
+        return creationDate;
     }
 }
