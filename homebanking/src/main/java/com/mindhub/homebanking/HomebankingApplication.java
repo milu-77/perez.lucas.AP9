@@ -2,6 +2,7 @@ package com.mindhub.homebanking;
 
 import com.mindhub.homebanking.models.*;
 import com.mindhub.homebanking.repositories.*;
+import com.mindhub.homebanking.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -25,12 +26,12 @@ public class HomebankingApplication {
     PasswordEncoder passwordEncoder;
 
     @Bean
-    public CommandLineRunner initData(ClientRepository clientRepository,
-                                      AccountRepository accountRepository,
-                                      TransactionRepository transactionRepository,
-                                      LoanRepository loanRepository,
-                                      ClientLoanRepository clientLoanRepository,
-                                      CardRepository cardRepository) {
+    public CommandLineRunner initData(ClientService clientService,
+                                      AccountService accountService,
+                                      TransactionService transactionService,
+                                      LoanService loanService,
+                                      ClientLoanService clientLoanService,
+                                      CardService cardService) {
         return (args) -> {
             //OBJETOS
             Client melba = new Client("Melba ", "Morel ", "melba@morel.com", passwordEncoder.encode("123"),Rol.CLIENT);
@@ -101,29 +102,30 @@ public class HomebankingApplication {
             juan.addCard(card3);
 
             //INGRESO A REPOSITORIOS
-            clientRepository.save(melba);
-            clientRepository.save(juan);
-            clientRepository.save(martita);
-            clientRepository.save(admin);
-            accountRepository.save(vin001);
-            accountRepository.save(vin002);
-            accountRepository.save(vin003);
-            transactionRepository.save(transaction1);
-            transactionRepository.save(transaction2);
-            transactionRepository.save(transaction3);
-            transactionRepository.save(transaction4);
-            transactionRepository.save(transaction5);
-            transactionRepository.save(transaction6);
-            loanRepository.save(hipotecario);
-            loanRepository.save(personal);
-            loanRepository.save(automotriz);
-            clientLoanRepository.save(prestamo1);
-            clientLoanRepository.save(prestamo2);
-            clientLoanRepository.save(prestamo3);
-            clientLoanRepository.save(prestamo4);
-            cardRepository.save(card1);
-            cardRepository.save(card2);
-            cardRepository.save(card3);
+
+            clientService.save(melba);
+            clientService.save(juan);
+            clientService.save(martita);
+            clientService.save(admin);
+            accountService.save(vin001);
+            accountService.save(vin002);
+            accountService.save(vin003);
+            transactionService.save(transaction1);
+            transactionService.save(transaction2);
+            transactionService.save(transaction3);
+            transactionService.save(transaction4);
+            transactionService.save(transaction5);
+            transactionService.save(transaction6);
+            loanService.save(hipotecario);
+            loanService.save(personal);
+            loanService.save(automotriz);
+            clientLoanService.save(prestamo1);
+            clientLoanService.save(prestamo2);
+            clientLoanService.save(prestamo3);
+            clientLoanService.save(prestamo4);
+            cardService.save(card1);
+            cardService.save(card2);
+            cardService.save(card3);
 
 
         };

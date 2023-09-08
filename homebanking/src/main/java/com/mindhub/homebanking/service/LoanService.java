@@ -10,4 +10,6 @@ public interface LoanService {
     List<LoanDTO> findAll();
 
     Loan findById(Long loanId);
+
+    void save(Loan loan);
 }

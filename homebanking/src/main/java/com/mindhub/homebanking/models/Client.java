@@ -170,10 +170,9 @@ public class Client {
             case 3: //cantidad de tipos de creditos: limite 2 y no mas del maximo
                 return this.cantDebType(loanType)<2 &&  this.debtType(loanType)<loanType.getMaxAmount();
             default:
-                System.out.println("Opción no válida");
+                return existLoanType(loanType);
         }
-        return false;
-    }
+     }
 
 
     public boolean canAccounts() {
