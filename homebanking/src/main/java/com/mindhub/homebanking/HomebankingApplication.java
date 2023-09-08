@@ -103,29 +103,29 @@ public class HomebankingApplication {
 
             //INGRESO A REPOSITORIOS
 
-            clientService.save(melba);
-            clientService.save(juan);
-            clientService.save(martita);
-            clientService.save(admin);
-            accountService.save(vin001);
-            accountService.save(vin002);
-            accountService.save(vin003);
-            transactionService.save(transaction1);
-            transactionService.save(transaction2);
-            transactionService.save(transaction3);
-            transactionService.save(transaction4);
-            transactionService.save(transaction5);
-            transactionService.save(transaction6);
-            loanService.save(hipotecario);
-            loanService.save(personal);
-            loanService.save(automotriz);
-            clientLoanService.save(prestamo1);
-            clientLoanService.save(prestamo2);
-            clientLoanService.save(prestamo3);
-            clientLoanService.save(prestamo4);
-            cardService.save(card1);
-            cardService.save(card2);
-            cardService.save(card3);
+//            clientService.save(melba);
+//            clientService.save(juan);
+//            clientService.save(martita);
+//            clientService.save(admin);
+//            accountService.save(vin001);
+//            accountService.save(vin002);
+//            accountService.save(vin003);
+//            transactionService.save(transaction1);
+//            transactionService.save(transaction2);
+//            transactionService.save(transaction3);
+//            transactionService.save(transaction4);
+//            transactionService.save(transaction5);
+//            transactionService.save(transaction6);
+//            loanService.save(hipotecario);
+//            loanService.save(personal);
+//            loanService.save(automotriz);
+//            clientLoanService.save(prestamo1);
+//            clientLoanService.save(prestamo2);
+//            clientLoanService.save(prestamo3);
+//            clientLoanService.save(prestamo4);
+//            cardService.save(card1);
+//            cardService.save(card2);
+//            cardService.save(card3);
 
 
         };
