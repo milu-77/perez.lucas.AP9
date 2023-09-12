@@ -1,5 +1,6 @@
 package com.mindhub.homebanking.models;
 
+import com.mindhub.homebanking.utils.CardUtils;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -40,9 +41,9 @@ public class Card {
         this.cardHolder = cardholder;
         this.cardType = cardType;
         this.cardColor = cardColor;
-        this.number = Card.newNumberCard();
-        this.cvv = Card.generateCvn();
-        this.truDate = Card.generateTruDate(fromDate, 5);
+        this.number = CardUtils.newNumberCard();
+        this.cvv = CardUtils.generateCvn();
+        this.truDate = CardUtils.generateTruDate(fromDate, 5);
         this.fromDate = fromDate;
     }
 
@@ -58,18 +59,18 @@ public class Card {
     public Card(CardType cardType, CardColor cardColor, LocalDateTime fromDate) {
         this.cardType = cardType;
         this.cardColor = cardColor;
-        this.number = Card.newNumberCard();
-        this.cvv = Card.generateCvn();
-        this.truDate = Card.generateTruDate(fromDate, 5);
+        this.number = CardUtils.newNumberCard();
+        this.cvv = CardUtils.generateCvn();
+        this.truDate = CardUtils.generateTruDate(fromDate, 5);
         this.fromDate = fromDate;
     }
 
     public Card(CardType cardType, CardColor cardColor) {
         this.cardType = cardType;
         this.cardColor = cardColor;
-        this.number = Card.newNumberCard();
-        this.cvv = Card.generateCvn();
-        this.truDate = Card.generateTruDate(LocalDateTime.now(), 5);
+        this.number = CardUtils.newNumberCard();
+        this.cvv = CardUtils.generateCvn();
+        this.truDate = CardUtils.generateTruDate(LocalDateTime.now(), 5);
         this.fromDate = LocalDateTime.now();
     }
 
@@ -77,8 +78,8 @@ public class Card {
         this.cardType = cardType;
         this.cardColor = cardColor;
         this.number = number;
-        this.cvv = Card.generateCvn();
-        this.truDate = Card.generateTruDate(LocalDateTime.now(), 5);
+        this.cvv = CardUtils.generateCvn();
+        this.truDate = CardUtils.generateTruDate(LocalDateTime.now(), 5);
         this.fromDate = LocalDateTime.now();
     }
 
@@ -147,32 +148,6 @@ public class Card {
         this.cardHolder = client;
     }
 
-    private static String generateCvn() {
-        StringBuilder cvn = new StringBuilder();
-        Random random = new Random();
-        for (int a = 0; a < 3; a++) {
-            int randomNumber = random.nextInt(10);
-            cvn.append(randomNumber);
-        }
-        return String.valueOf(cvn);
-    }
-
-    private static LocalDateTime generateTruDate(LocalDateTime fromDate, int years) {
-        return fromDate.plusYears(years);
-    }
-
-    public static String newNumberCard() {
-        Random random = new Random();
-        String number = (random.nextInt(9000) + 1000) +
-                "-" +
-                (random.nextInt(9000) + 1000) +
-                "-" +
-                (random.nextInt(9000) + 1000) +
-                "-" +
-                (random.nextInt(9000) + 1000);
-
-        return number;
-    }
 
     public boolean isHolder(Client client) {
         return  this.getCardHolder().getEmail().equals(client.getEmail());

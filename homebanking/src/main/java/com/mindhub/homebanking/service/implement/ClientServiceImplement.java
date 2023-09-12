@@ -43,4 +43,9 @@ public class ClientServiceImplement implements ClientService {
     public void save(Client client) {
         clientRepository.save(client);
     }
+
+    @Override
+    public boolean existsByEmailContains(String email) {
+        return clientRepository.existsByEmailContains(email);
+    }
 }

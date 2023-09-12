@@ -38,4 +38,11 @@ public class AccountServiceImplement implements AccountService {
         return accountRepository.findById(code).orElse(null);
     }
 
+    @Override
+    public boolean existsByNumber(String number) {
+        return accountRepository.existsByNumberContains(number);
+    }
+
+
+
 }

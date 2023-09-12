@@ -17,4 +17,6 @@ public interface ClientService {
     Client findById(Long code);
 
     void save(Client client);
+
+    boolean existsByEmailContains(String email);
 }

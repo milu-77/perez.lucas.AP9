@@ -5,6 +5,8 @@ import com.mindhub.homebanking.dtos.ClientDTO;
 import com.mindhub.homebanking.models.*;
 import com.mindhub.homebanking.service.CardService;
 import com.mindhub.homebanking.service.ClientService;
+import com.mindhub.homebanking.utils.AccountUtils;
+import com.mindhub.homebanking.utils.CardUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -74,16 +76,16 @@ public class CardController {
         }
     }
 
-    @RequestMapping(path = "clients/current/cards", method = RequestMethod.POST)
+    @PostMapping(path = "clients/current/cards")
     public ResponseEntity<String> createCard(@RequestParam CardType cardType,
                                              @RequestParam CardColor cardColor,
                                              Authentication authentication) {
         Client client = clientService.findByEmail(authentication.getName());
         if (client != null) {
             if (client.canCard(cardType, cardColor)) {
-                String number = Card.newNumberCard();
+                String number = CardUtils.newNumberCard();
                 while (cardService.findByNumber(number) != null) {
-                    number = String.valueOf(Account.newNumberAccount());
+                    number =  AccountUtils.newNumberAccount() ;
                 }
                 Card card = new Card(cardType, cardColor, number);
                 client.addCard(card);

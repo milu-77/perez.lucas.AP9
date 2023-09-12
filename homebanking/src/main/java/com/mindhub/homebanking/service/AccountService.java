@@ -15,4 +15,7 @@ public interface AccountService {
     List<AccountDTO> findAll();
 
     Account findById(Long code);
+
+
+    boolean existsByNumber(String number);
 }

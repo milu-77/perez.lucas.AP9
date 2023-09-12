@@ -74,7 +74,7 @@ public class TransactionController {
     }
 
     @Transactional
-    @RequestMapping(path = "/transactions", method = RequestMethod.POST)
+    @PostMapping(path = "/transactions")
     public ResponseEntity<Object> createTransactions(@RequestParam String fromAccountNumber,
                                                      @RequestParam String toAccountNumber,
                                                      @RequestParam float amount,

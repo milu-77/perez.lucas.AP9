@@ -1,38 +1,34 @@
 package com.mindhub.homebanking;
 
-import com.mindhub.homebanking.models.*;
-import com.mindhub.homebanking.repositories.*;
-import com.mindhub.homebanking.service.*;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.CommandLineRunner;
+  import com.mindhub.homebanking.models.*;
+  import com.mindhub.homebanking.service.*;
+  import org.springframework.beans.factory.annotation.Autowired;
+  import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-import org.springframework.security.crypto.password.PasswordEncoder;
+  import org.springframework.security.crypto.password.PasswordEncoder;
+  import java.time.LocalDateTime;
+  import java.util.ArrayList;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Date;
 
 @SpringBootApplication
 public class HomebankingApplication {
-
+   // @Autowired
+   // private PasswordEncoder passwordEncoder;
 
     public static void main(String[] args) {
         SpringApplication.run(HomebankingApplication.class, args);
     }
 
-    @Autowired
-    PasswordEncoder passwordEncoder;
 
-    @Bean
+
+   /* @Bean
     public CommandLineRunner initData(ClientService clientService,
-                                      AccountService accountService,
-                                      TransactionService transactionService,
-                                      LoanService loanService,
-                                      ClientLoanService clientLoanService,
-                                      CardService cardService) {
+                                      AccountService accountService) {
+
         return (args) -> {
+
             //OBJETOS
             Client melba = new Client("Melba ", "Morel ", "melba@morel.com", passwordEncoder.encode("123"),Rol.CLIENT);
             Client juan = new Client("Juan", "Salvo ", "juan@salvo.com", passwordEncoder.encode("123"),Rol.CLIENT);
@@ -103,13 +99,36 @@ public class HomebankingApplication {
 
             //INGRESO A REPOSITORIOS
 
-//            clientService.save(melba);
-//            clientService.save(juan);
-//            clientService.save(martita);
-//            clientService.save(admin);
-//            accountService.save(vin001);
-//            accountService.save(vin002);
-//            accountService.save(vin003);
+            if(!clientService.existsByEmailContains(melba.getEmail())){
+                clientService.save(melba);
+
+            }
+            if(!clientService.existsByEmailContains(juan.getEmail())){
+                clientService.save(juan);
+
+            }
+            if(!clientService.existsByEmailContains(martita.getEmail())){
+                clientService.save(martita);
+
+            }
+            if(!clientService.existsByEmailContains(admin.getEmail())){
+                clientService.save(admin);
+
+            }
+            if(!accountService.existsByNumber(vin001.getNumber())){
+                accountService.save(vin001);
+
+            }
+            if(!accountService.existsByNumber(vin002.getNumber())){
+                accountService.save(vin002);
+
+            }
+            if(!accountService.existsByNumber(vin003.getNumber())){
+                accountService.save(vin003);
+
+            }*/
+
+
 //            transactionService.save(transaction1);
 //            transactionService.save(transaction2);
 //            transactionService.save(transaction3);
@@ -128,7 +147,8 @@ public class HomebankingApplication {
 //            cardService.save(card3);
 
 
-        };
-    }
+      //  };
+   // }
+
 
 }

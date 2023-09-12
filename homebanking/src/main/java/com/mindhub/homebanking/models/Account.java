@@ -91,20 +91,9 @@ public class Account {
         this.transaction.add(transaction);
     }
 
-    public static String newNumberAccount() {
-        //PROBLEMA: Se genera solo 1000 cuentas al dia
-        StringBuilder number = new StringBuilder();
-        number.append("VIN-");
-        LocalDateTime date = LocalDateTime.now();
-        number.append(date.getYear() % 100);
-        Random random = new Random();
-        number.append(random.nextInt(1000000));
-        return String.valueOf(number);
-    }
 
-    public void addLoan(ClientLoan loanTaken) {
-        this.balance = (float) (this.balance + loanTaken.getAmount());
-    }
+
+
 
     public boolean isValidClient(String email) {
 

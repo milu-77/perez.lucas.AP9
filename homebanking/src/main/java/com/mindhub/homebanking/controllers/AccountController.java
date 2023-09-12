@@ -6,6 +6,7 @@ import com.mindhub.homebanking.models.Account;
 import com.mindhub.homebanking.models.Client;
 import com.mindhub.homebanking.service.AccountService;
 import com.mindhub.homebanking.service.ClientService;
+import com.mindhub.homebanking.utils.AccountUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -67,14 +68,14 @@ public class AccountController<t> {
         }
     }
 
-    @RequestMapping(path = "/clients/current/accounts", method = RequestMethod.POST)
+    @PostMapping(path = "/clients/current/accounts")
     public ResponseEntity<String> createAccount(Authentication authentication) {
         Client client = clientService.findByEmail(authentication.getName());
         if (client != null) {
             if (client.canAccounts()) {
-                String number = Account.newNumberAccount();
+                String number = AccountUtils.newNumberAccount();
                 while (accountService.findByNumber(number) != null) {
-                    number = String.valueOf(Account.newNumberAccount());
+                    number = String.valueOf(AccountUtils.newNumberAccount());
                 }
                 Account account = new Account(number, 0);
                 client.addAccounts(account);

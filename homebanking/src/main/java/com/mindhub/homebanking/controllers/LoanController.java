@@ -39,7 +39,7 @@ public class LoanController {
     }
 
     @Transactional
-    @RequestMapping(path = "/loans", method = RequestMethod.POST)
+    @PostMapping(path = "/loans")
     public ResponseEntity<Object> takeLoan(@RequestBody LoanApplicationDTO loan,
                                            Authentication authentication) {
         //{"loanId":1,"amount":12,"payments":12,"toAccountNumber":"VIN002"}

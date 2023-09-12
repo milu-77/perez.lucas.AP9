@@ -5,6 +5,7 @@ import com.mindhub.homebanking.models.Account;
 import com.mindhub.homebanking.models.Client;
 import com.mindhub.homebanking.service.AccountService;
 import com.mindhub.homebanking.service.ClientService;
+import com.mindhub.homebanking.utils.AccountUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -65,7 +66,7 @@ public class ClientController {
     }
 
 
-    @RequestMapping(path = "/clients", method = RequestMethod.POST)
+    @PostMapping(path = "/clients")
     public ResponseEntity<Object> register(
             @RequestParam String firstName, @RequestParam String lastName,
             @RequestParam String email, @RequestParam String password) {
@@ -85,8 +86,8 @@ public class ClientController {
             return new ResponseEntity<>("Name already in use", HttpStatus.FORBIDDEN);
         }
         Client client = new Client(firstName, lastName, email, passwordEncoder.encode(password));
-        String number = Account.newNumberAccount();
-        while (accountService.findByNumber(number) != null) number = String.valueOf(Account.newNumberAccount());
+        String number = AccountUtils.newNumberAccount();
+        while (accountService.findByNumber(number) != null) number =  AccountUtils.newNumberAccount() ;
         Account account = new Account(number, 0);
         client.addAccounts(account);
         clientService.save(client);
