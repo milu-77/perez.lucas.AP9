@@ -11,7 +11,9 @@ Vue.createApp({
             accountToNumber: "VIN",
             amount: 0,
             fees: [],
-            totalLoan:0
+            totalLoan:0,
+            rateInterest:" ",
+            loandate:""
         }
     },
     methods: {
@@ -69,7 +71,7 @@ Vue.createApp({
         },
         checkFees: function () {
             this.fees = [];
-            this.totalLoan = parseInt(this.amount) + (this.amount * 0.2);
+            this.totalLoan = parseInt(this.amount) + (this.amount * this.rateInterest);
             let amount = this.totalLoan / this.payments;
             for (let i = 1; i <= this.payments; i++) {
                 this.fees.push({ amount: amount });
@@ -91,5 +93,15 @@ Vue.createApp({
         this.okmodal = new bootstrap.Modal(document.getElementById('okModal'));
         this.feesmodal = new bootstrap.Modal(document.getElementById('feesModal'));
         this.getData();
+
+    },
+    computed:{
+        updateRateInterest(){
+            this.loandate=this.loanTypes.find(objeto => objeto.id == this.loanTypeId) ;
+            if(this.loandate!=undefined){
+                this.rateInterest=this.loandate.rateInterest;
+            }
+            console.log(this.rateInterest);
+        }
     }
 }).mount('#app')

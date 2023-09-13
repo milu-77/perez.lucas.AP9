@@ -4,6 +4,10 @@ import com.mindhub.homebanking.models.Client;
 import com.mindhub.homebanking.models.ClientLoan;
 import com.mindhub.homebanking.models.Loan;
 
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.util.Locale;
+
 public class ClientLoanDTO {
     private Long id;
     private Long loanId;
@@ -33,7 +37,9 @@ public class ClientLoanDTO {
     }
 
     public double getAmount() {
-        return amount;
+        DecimalFormatSymbols symbols = new DecimalFormatSymbols(Locale.US);
+         DecimalFormat format = new DecimalFormat("0.00",symbols);
+        return Double.parseDouble(format.format(amount));
     }
 
     public int getPayments() {

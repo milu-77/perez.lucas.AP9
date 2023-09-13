@@ -10,14 +10,17 @@ public class LoanDTO {
     private Long id;
     private String name;
     private float maxAmount;
+    private float rateInterest;
 
     private List<Integer> payments = new ArrayList<>();
+
 
     public LoanDTO(Loan loan) {
         this.id = loan.getId();
         this.name = loan.getName();
         this.maxAmount = loan.getMaxAmount();
         this.payments = loan.getPayments();
+        this.rateInterest=loan.getRateInterest();
     }
 
     public Long getId() {
@@ -34,5 +37,9 @@ public class LoanDTO {
 
     public List<Integer> getPayments() {
         return payments;
+    }
+
+    public float getRateInterest() {
+        return rateInterest;
     }
 }

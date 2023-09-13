@@ -18,6 +18,7 @@ public class Loan {
     private Long id;
     private String name;
     private float maxAmount;
+    private float rateInterest;
     @ElementCollection
     @Column(name = "payments")
     private List<Integer> payments = new ArrayList<>();
@@ -27,10 +28,11 @@ public class Loan {
     public Loan() {
     }
 
-    public Loan(String name, float maxAmount, List<Integer> payments) {
+    public Loan(String name, float maxAmount, List<Integer> payments, float rateInterest) {
         this.name = name;
         this.maxAmount = maxAmount;
         this.payments = payments;
+        this.rateInterest=rateInterest;
     }
 
     public Long getId() {
@@ -76,6 +78,14 @@ public class Loan {
             return false;
         }
         return this.payments.contains(loan.getPayments());
+    }
+
+    public float getRateInterest() {
+        return rateInterest;
+    }
+
+    public void setRateInterest(float rateInterest) {
+        this.rateInterest = rateInterest;
     }
 }
 

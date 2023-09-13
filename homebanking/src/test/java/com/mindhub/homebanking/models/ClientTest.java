@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -14,13 +15,13 @@ class ClientTest {
     @Test
     void debtType() {
         Client client =new Client();
-        Loan hipotecario = new Loan("mortgage", 500000, new ArrayList<Integer>() {{
+        Loan hipotecario = new Loan("mortgage", 500000F, (List<Integer>) new ArrayList<Integer>() {{
             add(12);
             add(24);
             add(36);
             add(48);
             add(60);
-        }});
+        }}, 0.3F);
         ClientLoan prestamo1 = new ClientLoan(200000, 60);
         prestamo1.addClient(client);
         prestamo1.addLoan(hipotecario);
@@ -41,13 +42,13 @@ class ClientTest {
     @Test
     void cantDebType() {
         Client client =new Client();
-        Loan hipotecario = new Loan("mortgage", 500000, new ArrayList<Integer>() {{
+        Loan hipotecario = new Loan("mortgage", 500000F, (List<Integer>) new ArrayList<Integer>() {{
             add(12);
             add(24);
             add(36);
             add(48);
             add(60);
-        }});
+        }}, 0.3F);
         ClientLoan prestamo1 = new ClientLoan(200000, 60);
         prestamo1.addClient(client);
         prestamo1.addLoan(hipotecario);
@@ -61,13 +62,13 @@ class ClientTest {
     @Test
     void existLoanType() {
         Client client =new Client();
-        Loan hipotecario = new Loan("mortgage", 500000, new ArrayList<Integer>() {{
+        Loan hipotecario = new Loan("mortgage", 500000F, (List<Integer>) new ArrayList<Integer>() {{
             add(12);
             add(24);
             add(36);
             add(48);
             add(60);
-        }});
+        }}, 0.3F);
         assertThat( client.existLoanType(hipotecario),is(true));
         ClientLoan prestamo1 = new ClientLoan(200000, 60);
         prestamo1.addClient(client);

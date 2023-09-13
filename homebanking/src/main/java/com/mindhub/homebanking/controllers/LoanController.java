@@ -72,7 +72,8 @@ public class LoanController {
                             Account account = accountService.findByNumber(loan.getToAccountNumber());
                             if (account.isValidClient(client.getEmail())) {// Verificar que la cuenta de destino pertenezca al cliente autenticado
                                 // Se debe crear una solicitud de préstamo con el monto solicitado sumando el 20% del mismo
-                                ClientLoan loanTaken = new ClientLoan((loan.getAmount() * 1.2), loan.getPayments());
+                                double finalPay=loan.getAmount() * (1+loanType.getRateInterest());
+                                ClientLoan loanTaken = new ClientLoan( finalPay, loan.getPayments());
                                 // Se debe crear una transacción “CREDIT” asociada a la cuenta de destino (el monto debe quedar positivo) con la descripción concatenando el nombre del préstamo y la frase “loan approved”
                                 Transaction transaction = new Transaction(TransactionType.CREDIT, loanType.getName() + " - loan approved", (float) loan.getAmount());
                                 account.addTransaction(transaction);
