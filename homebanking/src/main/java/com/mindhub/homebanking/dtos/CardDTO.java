@@ -15,6 +15,7 @@ public class CardDTO {
     private String number;
     private String cvv;
     private LocalDateTime truDate;
+    private boolean deleted;
 
     public CardDTO() {
     }
@@ -27,6 +28,7 @@ public class CardDTO {
         this.number = card.getNumber();
         this.cvv = card.getCvv();
         this.truDate =  card.getTruDate() ;
+        this.deleted= card.isDeleted();
      }
 
     public Long getId() {
@@ -55,5 +57,9 @@ public class CardDTO {
 
     public String getCardHolder() {
         return cardHolder;
+    }
+
+    public boolean isDeleted() {
+        return deleted;
     }
 }

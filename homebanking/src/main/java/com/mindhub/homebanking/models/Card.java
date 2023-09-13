@@ -23,6 +23,7 @@ public class Card {
     private String cvv;
     private LocalDateTime truDate;
     private LocalDateTime fromDate;
+    private boolean deleted = Boolean.FALSE;
 
     public Card() {
     }
@@ -54,6 +55,14 @@ public class Card {
         this.cvv = cvv;
         this.truDate = truDate;
         this.fromDate = fromDate;
+    }
+
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted() {
+        this.deleted =  !this.deleted;
     }
 
     public Card(CardType cardType, CardColor cardColor, LocalDateTime fromDate) {

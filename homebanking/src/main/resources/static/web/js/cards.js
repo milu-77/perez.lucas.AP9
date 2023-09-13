@@ -25,6 +25,22 @@ Vue.createApp({
         formatDate: function (date) {
             return new Date(date).toLocaleDateString('en-gb');
         },
+		deleteCard: function(cardnumber){
+            var url = "/api/clients/current/cards/"+cardnumber;
+        axios.delete(url)
+        .then((response) => {
+         window.location.href = "/web/cards.html"
+        })
+        .catch((error) => {
+            console.error('Error en la solicitud DELETE', error);
+        });
+
+		},
+		
+		
+		
+		
+		
         signOut: function () {
             axios.post('/api/logout')
                 .then(response => window.location.href = "/web/index.html")

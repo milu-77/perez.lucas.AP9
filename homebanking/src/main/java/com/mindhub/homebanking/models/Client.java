@@ -129,14 +129,21 @@ public class Client {
     }
 
     public Long numCard(CardType cardType) {
+        Set<Card> cards0 = this.cards.stream()
+                .filter(newCard -> !newCard.isDeleted())
+                .collect(Collectors.toSet());
 
-        return cards.stream()
+        return cards0.stream()
                 .filter(card -> card.getCardType().equals(cardType))
                 .count();
     }
 
     public boolean canCard(CardType cardType, CardColor cardColor) {
-        Set<Card> cards = this.cards.stream()
+        Set<Card> cards0 = this.cards.stream()
+                .filter(newCard -> !newCard.isDeleted())
+                .collect(Collectors.toSet());
+
+        Set<Card> cards = cards0.stream()
                 .filter(newCard -> newCard.getCardType() == cardType).collect(Collectors.toSet());
         long cantColor = cards.stream()
                 .filter(card -> card.getCardColor().equals(cardColor))

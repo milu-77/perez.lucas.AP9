@@ -18,7 +18,9 @@ public class CardServiceImplement implements CardService {
 
     @Override
     public List<CardDTO> findAll() {
-        return cardRepository.findAll().stream()
+
+        return cardRepository.findAll()
+                .stream()
                 .map(CardDTO::new)
                 .collect(toList());
     }

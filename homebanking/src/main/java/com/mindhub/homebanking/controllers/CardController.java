@@ -7,6 +7,7 @@ import com.mindhub.homebanking.service.CardService;
 import com.mindhub.homebanking.service.ClientService;
 import com.mindhub.homebanking.utils.AccountUtils;
 import com.mindhub.homebanking.utils.CardUtils;
+import com.mindhub.homebanking.utils.ClientUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -51,7 +52,7 @@ public class CardController {
                     CardDTO cardDTO = new CardDTO(card);
                     return new ResponseEntity<>(cardDTO, HttpStatus.ACCEPTED);
                 }
-                if (  card.isHolder(client)) {
+                if (card.isHolder(client)) {
                     CardDTO cardDTO = new CardDTO(card);
                     return new ResponseEntity<>(cardDTO, HttpStatus.ACCEPTED);
                 } else {
@@ -85,7 +86,7 @@ public class CardController {
             if (client.canCard(cardType, cardColor)) {
                 String number = CardUtils.newNumberCard();
                 while (cardService.findByNumber(number) != null) {
-                    number =  AccountUtils.newNumberAccount() ;
+                    number = AccountUtils.newNumberAccount();
                 }
                 Card card = new Card(cardType, cardColor, number);
                 client.addCard(card);
@@ -93,6 +94,29 @@ public class CardController {
                 return new ResponseEntity<>("Card created", HttpStatus.CREATED);
             } else {
                 return new ResponseEntity<>("Cannot create that type of card", HttpStatus.FORBIDDEN);
+            }
+        } else {
+            return new ResponseEntity<>("User account does not exists", HttpStatus.NOT_FOUND);
+        }
+    }
+
+
+    @DeleteMapping (path = "clients/current/cards/{cardDelete}")
+    public ResponseEntity<String> deleteCard(@PathVariable String cardDelete,
+                                             Authentication authentication) {
+        Client client = clientService.findByEmail(authentication.getName());
+        if (client != null) {
+            Card card = cardService.findByNumber(cardDelete);
+            if (card != null) {
+                if (ClientUtils.compareClientByMail(card.getCardHolder(), client)) {
+                    card.setDeleted();
+                    cardService.save(card);
+                    return new ResponseEntity<>("Card delete", HttpStatus.OK);
+                } else {
+                    return new ResponseEntity<>("You don't have permission to access on this server", HttpStatus.UNAUTHORIZED);
+                }
+            } else {
+                return new ResponseEntity<>("Resource not found", HttpStatus.NOT_FOUND);
             }
         } else {
             return new ResponseEntity<>("User account does not exists", HttpStatus.NOT_FOUND);

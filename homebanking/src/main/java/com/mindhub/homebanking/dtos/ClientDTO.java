@@ -61,7 +61,12 @@ public class ClientDTO {
     }
 
     public Set<CardDTO> getCards() {
-        return cards;
+
+        return cards.stream()
+                .filter(card -> !card.isDeleted())
+                .collect(Collectors.toSet());
+
+
     }
 
     public boolean isAdmin() {
