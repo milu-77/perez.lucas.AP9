@@ -19,6 +19,7 @@ public class Transaction {
     private LocalDateTime date;
     private String description;
     private float amount;
+    private float balance =0;
 
     public Transaction() {
     }
@@ -83,5 +84,13 @@ public class Transaction {
 
     public boolean isHolder(Client client) {
         return this.getAccount().getMailHolder().equals(client.getEmail());
+    }
+
+    public float getBalance() {
+        return balance;
+    }
+
+    public void setBalance(float balance) {
+        this.balance = balance;
     }
 }

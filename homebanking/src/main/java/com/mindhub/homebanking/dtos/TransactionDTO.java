@@ -11,12 +11,14 @@ public class TransactionDTO {
     private LocalDateTime date;
     private String description;
     private float amount;
+    private float balance;
 
     public TransactionDTO(Transaction transaction) {
         this.type = transaction.getType();
         this.date = transaction.getDate();
         this.description = transaction.getDescription();
         this.amount = transaction.getAmount();
+        this.balance= transaction.getBalance();
     }
 
     public TransactionType getType() {
@@ -33,5 +35,9 @@ public class TransactionDTO {
 
     public float getAmount() {
         return amount;
+    }
+
+    public float getBalance() {
+        return balance;
     }
 }
