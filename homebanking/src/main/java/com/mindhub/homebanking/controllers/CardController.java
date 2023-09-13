@@ -100,7 +100,8 @@ public class CardController {
         }
     }
 
-
+    /*Agregar botón para eliminar una tarjeta,
+    se debe crear el servicio y llamarlo desde javascript*/
     @DeleteMapping (path = "clients/current/cards/{cardDelete}")
     public ResponseEntity<String> deleteCard(@PathVariable String cardDelete,
                                              Authentication authentication) {
@@ -122,5 +123,4 @@ public class CardController {
             return new ResponseEntity<>("User account does not exists", HttpStatus.NOT_FOUND);
         }
     }
-
 }

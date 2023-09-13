@@ -53,7 +53,10 @@ public class ClientDTO {
         return email;
     }
     public Set<AccountDTO> getAccounts() {
-        return accounts;
+
+        return accounts.stream()
+                .filter(account -> !account.isDeleted())
+                .collect(Collectors.toSet());
     }
 
     public Set<ClientLoanDTO> getLoans() {
@@ -61,12 +64,9 @@ public class ClientDTO {
     }
 
     public Set<CardDTO> getCards() {
-
         return cards.stream()
                 .filter(card -> !card.isDeleted())
                 .collect(Collectors.toSet());
-
-
     }
 
     public boolean isAdmin() {

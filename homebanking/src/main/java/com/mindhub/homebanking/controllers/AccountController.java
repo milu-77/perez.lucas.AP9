@@ -3,10 +3,12 @@ package com.mindhub.homebanking.controllers;
 import com.mindhub.homebanking.dtos.AccountDTO;
 import com.mindhub.homebanking.dtos.ClientDTO;
 import com.mindhub.homebanking.models.Account;
+import com.mindhub.homebanking.models.Card;
 import com.mindhub.homebanking.models.Client;
 import com.mindhub.homebanking.service.AccountService;
 import com.mindhub.homebanking.service.ClientService;
 import com.mindhub.homebanking.utils.AccountUtils;
+import com.mindhub.homebanking.utils.ClientUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -88,5 +90,40 @@ public class AccountController<t> {
             return new ResponseEntity<>("User Account does not exists", HttpStatus.FORBIDDEN);
         }
     }
+
+//    Eliminar cuentas 	Agregar botón para eliminar cuentas,
+//    se deben eliminar las transacciones de la cuenta.
+    @DeleteMapping (path = "clients/current/accounts/{accountsDelete}")
+    public ResponseEntity<String> deleteAccount(@PathVariable String accountsDelete,
+                                             Authentication authentication) {
+        Client client = clientService.findByEmail(authentication.getName());
+        if (client != null) {
+            Account account = accountService.findByNumber(accountsDelete);
+            if (account != null) {
+                if (ClientUtils.compareClientByMail(account.getHolder(), client)) {
+                    account.setDeleted();
+                    accountService.save(account);
+                    return new ResponseEntity<>("Account delete", HttpStatus.OK);
+                } else {
+                    return new ResponseEntity<>("You don't have permission to access on this server", HttpStatus.UNAUTHORIZED);
+                }
+            } else {
+                return new ResponseEntity<>("Resource not found", HttpStatus.NOT_FOUND);
+            }
+        } else {
+            return new ResponseEntity<>("User account does not exists", HttpStatus.NOT_FOUND);
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
 }
 

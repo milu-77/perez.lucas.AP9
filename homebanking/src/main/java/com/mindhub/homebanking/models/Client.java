@@ -125,6 +125,11 @@ public class Client {
     }
 
     public int numAccounts() {
+        Set<Account> accounts = this.accounts.stream()
+                .filter(account -> !account.isDeleted())
+                .collect(Collectors.toSet());
+
+
         return accounts.size();
     }
 
@@ -183,6 +188,8 @@ public class Client {
 
 
     public boolean canAccounts() {
+
+
         return numAccounts()<3;
     }
 

@@ -30,6 +30,17 @@ Vue.createApp({
                     this.errorToats.show();
                 })
         },
+        deleteAccount: function(accountNumber){
+            var url = "/api/clients/current/accounts/"+accountNumber;
+        axios.delete(url)
+        .then((response) => {
+         window.location.href = "/web/accounts.html"
+        })
+        .catch((error) => {
+            console.error('Error en la solicitud DELETE', error);
+        });
+
+		},
         create: function () {
             axios.post('/api/clients/current/accounts')
                 .then(response => window.location.reload())

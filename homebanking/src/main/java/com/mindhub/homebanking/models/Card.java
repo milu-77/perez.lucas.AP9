@@ -57,13 +57,7 @@ public class Card {
         this.fromDate = fromDate;
     }
 
-    public boolean isDeleted() {
-        return deleted;
-    }
 
-    public void setDeleted() {
-        this.deleted =  !this.deleted;
-    }
 
     public Card(CardType cardType, CardColor cardColor, LocalDateTime fromDate) {
         this.cardType = cardType;
@@ -157,7 +151,13 @@ public class Card {
         this.cardHolder = client;
     }
 
+    public boolean isDeleted() {
+        return deleted;
+    }
 
+    public void setDeleted() {
+        this.deleted =  !this.deleted;
+    }
     public boolean isHolder(Client client) {
         return  this.getCardHolder().getEmail().equals(client.getEmail());
 

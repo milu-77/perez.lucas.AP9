@@ -15,6 +15,8 @@ public class AccountDTO {
     private float balance;
     private LocalDateTime creationDate;
     public String mailHolder;
+    private boolean deleted ;
+
     Set<TransactionDTO> transactions = new HashSet<>();
 
     public AccountDTO(Account account) {
@@ -24,6 +26,7 @@ public class AccountDTO {
         this.balance = account.getBalance();
         this.transactions = account.getTransaction().stream().map(TransactionDTO::new).collect(Collectors.toSet());
         mailHolder = account.getHolder().getEmail();
+        this.deleted=account.isDeleted();
     }
 
     public long getId() {
@@ -48,6 +51,10 @@ public class AccountDTO {
 
     public Set<TransactionDTO> getTransactions() {
         return transactions;
+    }
+
+    public boolean isDeleted() {
+        return deleted;
     }
 
     public LocalDateTime getCreationDate() {

@@ -11,7 +11,7 @@ public class AccountUtils {
         LocalDateTime date = LocalDateTime.now();
         number.append(date.getYear() % 100);
         Random random = new Random();
-        number.append(random.nextInt(1000000));
+        number.append(random.nextInt(900000)+100000);
         return String.valueOf(number);
     }
 }

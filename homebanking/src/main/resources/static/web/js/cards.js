@@ -35,12 +35,7 @@ Vue.createApp({
             console.error('Error en la solicitud DELETE', error);
         });
 
-		},
-		
-		
-		
-		
-		
+		},	
         signOut: function () {
             axios.post('/api/logout')
                 .then(response => window.location.href = "/web/index.html")

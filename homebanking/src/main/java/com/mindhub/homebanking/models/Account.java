@@ -22,6 +22,8 @@ public class Account {
     private String number;
     private LocalDateTime date;
     private float balance;
+    private boolean deleted = Boolean.FALSE;
+
     @OneToMany(mappedBy = "account", fetch = FetchType.EAGER)
     Set<Transaction> transaction = new HashSet<>();
 
@@ -73,6 +75,8 @@ public class Account {
         return this.holder;
     }
 
+
+
     public void setHolder(Client holder) {
         this.holder = holder;
     }
@@ -91,9 +95,13 @@ public class Account {
         this.transaction.add(transaction);
     }
 
+    public boolean isDeleted() {
+        return deleted;
+    }
 
-
-
+    public void setDeleted() {
+        this.deleted = !this.deleted;
+    }
 
     public boolean isValidClient(String email) {
 
