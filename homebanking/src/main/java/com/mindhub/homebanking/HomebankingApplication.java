@@ -10,12 +10,13 @@ import org.springframework.context.annotation.Bean;
   import org.springframework.security.crypto.password.PasswordEncoder;
   import java.time.LocalDateTime;
   import java.util.ArrayList;
+  import java.util.List;
 
 
 @SpringBootApplication
 public class HomebankingApplication {
-   // @Autowired
-    //private PasswordEncoder passwordEncoder;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     public static void main(String[] args) {
         SpringApplication.run(HomebankingApplication.class, args);
@@ -23,9 +24,14 @@ public class HomebankingApplication {
 
 
 
-   /* @Bean
-    public CommandLineRunner initData(ClientService clientService,
-                                      AccountService accountService) {
+    @Bean
+    public CommandLineRunner initData(  ClientService clientService,
+                                        AccountService accountService,
+                                        TransactionService transactionService,
+                                        LoanService loanService,
+                                        ClientLoanService clientLoanService,
+                                        CardService cardService
+    ) {
 
         return (args) -> {
 
@@ -46,32 +52,32 @@ public class HomebankingApplication {
             Transaction transaction5 = new Transaction(TransactionType.DEBIT, LocalDateTime.now().minusDays(1), "Compra de algo random", 2000);
             Transaction transaction6 = new Transaction(TransactionType.CREDIT, LocalDateTime.now().minusDays(5), "Transferencia", 1000);
 
-            Loan hipotecario = new Loan("mortgage", 500000, new ArrayList<Integer>() {{
+            Loan hipotecario = new Loan("mortgage", 500000F, (List<Integer>) new ArrayList<Integer>() {{
                 add(12);
                 add(24);
                 add(36);
                 add(48);
                 add(60);
-            }});
-            Loan personal = new Loan("Personal Loan", 500000, new ArrayList<Integer>() {{
+            }}, 0.21F);
+            Loan personal = new Loan("Personal Loan", 500000F, (List<Integer>) new ArrayList<Integer>() {{
                 add(6);
                 add(12);
                 add(24);
-            }});
+            }}, 0.254F);
             Loan automotriz = new Loan("Auto loan", 500000, new ArrayList<Integer>() {{
                 add(6);
                 add(12);
                 add(24);
                 add(36);
-            }});
+            }},0.34F);
             ClientLoan prestamo1 = new ClientLoan(400000, 60);
             ClientLoan prestamo2 = new ClientLoan(50000, 12);
             ClientLoan prestamo3 = new ClientLoan(100000, 24);
             ClientLoan prestamo4 = new ClientLoan(200000, 36);
 
-            Card card1 = new Card(CardType.DEBIT, CardColor.GOLD, LocalDateTime.now());
-            Card card2 = new Card(CardType.CREDIT, CardColor.TITANIUM, "4117-9603-8636-9162", "456", LocalDateTime.now().plusYears(5), LocalDateTime.now());
-            Card card3 = new Card(CardType.CREDIT, CardColor.SILVER, LocalDateTime.now());
+            Card card1 = new Card(CardType.DEBIT, CardColor.GOLD);
+            Card card2 = new Card(CardType.CREDIT, CardColor.TITANIUM);
+            Card card3 = new Card(CardType.CREDIT, CardColor.SILVER);
 
 
             prestamo1.addClient(melba);
@@ -126,29 +132,29 @@ public class HomebankingApplication {
             if(!accountService.existsByNumber(vin003.getNumber())){
                 accountService.save(vin003);
 
-            }*/
+            }
 
 
-//            transactionService.save(transaction1);
-//            transactionService.save(transaction2);
-//            transactionService.save(transaction3);
-//            transactionService.save(transaction4);
-//            transactionService.save(transaction5);
-//            transactionService.save(transaction6);
-//            loanService.save(hipotecario);
-//            loanService.save(personal);
-//            loanService.save(automotriz);
-//            clientLoanService.save(prestamo1);
-//            clientLoanService.save(prestamo2);
-//            clientLoanService.save(prestamo3);
-//            clientLoanService.save(prestamo4);
-//            cardService.save(card1);
-//            cardService.save(card2);
-//            cardService.save(card3);
+            transactionService.save(transaction1);
+            transactionService.save(transaction2);
+            transactionService.save(transaction3);
+            transactionService.save(transaction4);
+            transactionService.save(transaction5);
+            transactionService.save(transaction6);
+            loanService.save(hipotecario);
+            loanService.save(personal);
+            loanService.save(automotriz);
+            clientLoanService.save(prestamo1);
+            clientLoanService.save(prestamo2);
+            clientLoanService.save(prestamo3);
+            clientLoanService.save(prestamo4);
+            cardService.save(card1);
+            cardService.save(card2);
+            cardService.save(card3);
 
 
-      //  };
-   // }
+        };
+    }
 
 
 }
